@@ -83,7 +83,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
 */
     protected function parseFunctionDefinitions() {
         foreach ($this->tokens as $t) {
-            if ($t->type() == T_FUNCTION) {
+            if ($t instanceof FunctionToken) {
                 $this->definitions['functions'][] = new FunctionDefinition($t);
             }
         }
@@ -91,7 +91,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     
     protected function parseClassDefinitions() {
         foreach ($this->tokens as $t) {
-            if ($t->type() == T_CLASS) {
+            if ($t instanceof ClassToken) {
                 $this->definitions['classes'][] = new ClassDefinition($t);
             }
         }
