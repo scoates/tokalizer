@@ -19,6 +19,13 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         'classes' => array(), // of ClassDefinitions
         'functions' => array(), // of FunctionDefinitions
     );
+    
+    public static function fromFile($file) {
+        if (!is_readable($file)) {
+            throw new Exception("$file is not readable");
+        }
+        return new self(file_get_contents($file), $file);
+    }
 
     public function __construct($source, $file = null) {
         $this->file = $file;
