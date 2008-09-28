@@ -20,6 +20,8 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         'functions' => array(), // of FunctionDefinitions
     );
     
+    protected $functionCalls;
+    
     public static function fromFile($file) {
         if (!is_readable($file)) {
             throw new Exception("$file is not readable");
@@ -63,8 +65,18 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     protected function parse() {
         $this->parseClassDefinitions();
         $this->parseFunctionDefinitions();
+//        $this->parseFunctionCalls();
     }
     
+/*
+    protected function parseFunctionCalls() {
+        foreach ($this->tokens as $t) {
+            if ($t->type() == T_FUNCTION) {
+                $this->definitions['functions'][] = new FunctionDefinition($t);
+            }
+        }
+    }
+*/
     protected function parseFunctionDefinitions() {
         foreach ($this->tokens as $t) {
             if ($t->type() == T_FUNCTION) {
@@ -87,6 +99,10 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
 
     public function getClasses() {
         return $this->definitions['classes'];
+    }
+    
+    public function getFile() {
+        return $this->file;
     }
     
     // iterator implementation

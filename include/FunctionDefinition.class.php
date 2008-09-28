@@ -32,4 +32,24 @@ class FunctionDefinition extends AbstractDefinition {
     public function getClass() {
         return $this->class;
     }
+
+    public function __toString() {
+        $name = $this->class ? ($this->class . '::' . $this->name) : $this->name();
+        $ret = '';
+        if ($this->visibility) {
+            $ret .= FunctionToken::visibilityName($this->visibility) . ' ';
+        }
+        if ($this->static) {
+            $ret .= 'static ';
+        }
+        $ret .= "function {$name} (";
+        $file = $this->FunctionToken->Set()->getFile();
+        if ($file) {
+            $ret .= "file: {$file}; ";
+        }
+        $line = $this->StartToken->line();
+        $ret .= "line: {$line})";
+        return  $ret;
+    }
+
 }

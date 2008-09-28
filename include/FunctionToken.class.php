@@ -57,4 +57,20 @@ class FunctionToken extends Token {
         return $startToken;
     }
     
+    public static function visibilityName($visibility) {
+        switch ($visibility) {
+            case T_PUBLIC:
+                return 'public';
+                break;
+            case T_PROTECTED:
+                return 'protected';
+                break;
+            case T_PRIVATE:
+                return 'private';
+                break;
+            default:
+                throw new Exception('Invalid visibility');
+        }
+    }
+
 }
