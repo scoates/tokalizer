@@ -65,6 +65,14 @@ class Token {
                         case T_OBJECT_OPERATOR:
                             return new ObjectFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex, $prev[1]);
                             break;
+                        
+                        case T_FUNCTION:
+                            return $this; // (is a function definition name)
+                            break;
+                        
+                        default:
+                            // quacks like a function call...
+                            return new ProceduralFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex);
                     }
                 }
                 

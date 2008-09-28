@@ -76,22 +76,17 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     protected function parse() {
         $this->parseClassDefinitions();
         $this->parseFunctionDefinitions();
-//        $this->parseFunctionCalls();
+        $this->parseFunctionCalls();
     }
     
-/*
     protected function parseFunctionCalls() {
         foreach ($this->tokens as $t) {
-            if ($t->type() == T_STRING) {
-                $next = $t->getNextTokens(1);
-                if ($next[0]->value() == '(') {
-                    echo "$t\n";
-                    //$this->functionCalls[] = new FunctionCall($t);
-                }
+            if ($t instanceof FunctionCallToken) {
+                $this->functionCalls[] = $t->conjureFunctionCall();
             }
         }
     }
-*/
+    
     protected function parseFunctionDefinitions() {
         foreach ($this->tokens as $t) {
             if ($t instanceof FunctionToken) {
