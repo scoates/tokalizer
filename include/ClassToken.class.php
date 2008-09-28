@@ -7,7 +7,7 @@ class ClassToken extends Token {
     }
     
     public function getNameToken() {
-        $nameToken = $this->getNextTokens(1, true);
+        $nameToken = $this->getNextTokens(1);
         return $nameToken[0];
     }
     
@@ -16,7 +16,7 @@ class ClassToken extends Token {
     }
     
     public function getExtends() {
-        $next = $this->getNextTokens(3, true); // class foo(0) extends(1) bar(2)
+        $next = $this->getNextTokens(3); // class foo(0) extends(1) bar(2)
         if (count($next) == 3 && $next[1]->type() == T_EXTENDS) {
             return $next[2]->value();
         } else {
@@ -25,7 +25,7 @@ class ClassToken extends Token {
     }
     
     public function getAbstract() {
-        $prev = $this->getPrevTokens(1, true); // abstract(0) class
+        $prev = $this->getPrevTokens(1); // abstract(0) class
         return $prev[0]->type() == T_ABSTRACT;
     }
 }

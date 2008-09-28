@@ -7,14 +7,14 @@ class FunctionToken extends Token {
     }
     
     public function getNameToken() {
-        $nameToken = $this->getNextTokens(1, true);
+        $nameToken = $this->getNextTokens(1);
         return $nameToken[0];
     }
 
     public function getVisibility() {
         // fetch the two (or fewer) previous tokens
         $visibility = null;
-        foreach ($this->getPrevTokens(2, true) as $prev) {
+        foreach ($this->getPrevTokens(2) as $prev) {
             // check those tokens for visibility;
             switch ($prev->type()) {
                 case T_PUBLIC:
@@ -30,7 +30,7 @@ class FunctionToken extends Token {
     public function getStatic() {
         // fetch the two (or fewer) previous tokens
         $static = null;
-        foreach ($this->getPrevTokens(2, true) as $prev) {
+        foreach ($this->getPrevTokens(2) as $prev) {
             // check those tokens for static
             switch ($prev->type()) {
                 case T_STATIC:
@@ -47,11 +47,11 @@ class FunctionToken extends Token {
         
         // if static or visibility is one of the previous token, the function starts there:
         if ($static || $visibility) {
-            list($startToken) = $this->getPrevTokens(1, true);
+            list($startToken) = $this->getPrevTokens(1);
         }
         // however, if they're BOTH set, then we need to go two tokens (plus whitespace) back:
         if ($static && $visibility) {
-            list(,$startToken) = $this->getPrevTokens(2, true);
+            list(,$startToken) = $this->getPrevTokens(2);
         }
         
         return $startToken;

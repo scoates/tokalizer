@@ -157,11 +157,11 @@ class Token {
         return $tokens;
     }
     
-    public function getPrevTokens($num, $skipWhitespace = false) {
+    public function getPrevTokens($num, $skipWhitespace = true) {
         return $this->getTokens(self::DIR_PREV, $num, $skipWhitespace);
     }
     
-    public function getNextTokens($num, $skipWhitespace = false) {
+    public function getNextTokens($num, $skipWhitespace = true) {
         return $this->getTokens(self::DIR_NEXT, $num, $skipWhitespace);
     }
     
