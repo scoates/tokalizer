@@ -9,7 +9,7 @@ class ClassDefinition extends AbstractDefinition {
         $this->name = $t->getNameToken()->value();
         $this->StartToken = $t->getStartToken();
         $openBrace = $t->findOpenBrace();
-        $this->EndToken = $openBrace->findMatchingBrace();
+        $this->EndToken = $openBrace->findMatchingBrace(true);
         $this->abstract = $t->getAbstract();
         $this->extends = $t->getExtends();
     }

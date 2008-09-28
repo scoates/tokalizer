@@ -13,7 +13,7 @@ abstract class AbstractDefinition {
     }
     
     public function endToken() {
-        return $this->EtartToken;
+        return $this->EndToken;
     }
     
     public function occupiesLine($line) {

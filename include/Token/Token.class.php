@@ -33,18 +33,55 @@ class Token {
                     break; // semantics (-:
             }
         }
-        // fallthrough to regular Token
+        // fall through to regular Token
         return new Token($token, $Set);
     }
     
     public function mutate() {
-        // no mutation for now
+        if (get_class($this) != __CLASS__) {
+            // only mutate Tokens (not special tokens found in the first pass)
+            return $this;
+        }
+        switch ($this->type) {
+            case T_STRING:
+                // T_STRING can be a function call; let's check:
+                $prev = $this->getPrevTokens(2);
+                $next = $this->getPrevTokens(1);
+                
+                // first check is constructor (easy to check because of "new")
+                // but constructor doesn't require parens
+                if ($prev[0]->type == T_NEW) {
+                    // this could be a lot cleaner with LSB
+                    return new ConstructorFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                }
+                
+                // check for other types
+                if ($next[0]->value != '(' && count($prev) == 2) {
+                    // if the next token is an open paren, then we have a function call:
+                    switch ($prev[0]->type) {
+                        case T_PAAMAYIM_NEKUDOTAYIM: // "::" (-;
+                            return new StaticFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex, $prev[1]);
+                            break;
+                        case T_OBJECT_OPERATOR:
+                            return new ObjectFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex, $prev[1]);
+                            break;
+                    }
+                }
+                
+                // no match, so fall through to the default...
+                
+                break;
+        }
+        // fall through to no mutation
         return $this;
     }
     
-    private function __construct($token, TokenSet $Set) {
+    protected function __construct($token, TokenSet $Set, $setIndex = null) {
         $this->Set = $Set;
-        $this->setIndex = count($Set) - 1;
+        if ($setIndex == null) {
+            $setIndex = count($Set) - 1;
+        }
+        $this->setIndex = $setIndex;
         if (is_array($token)) {
             $this->type = $token[0];
             $this->value = $token[1];
@@ -71,10 +108,15 @@ class Token {
         return $this->type;
     }
     
-    public function next() {
-        if ($this->setIndex < count($this->Set) - 1) {
+    public function next($debug=false) {
+        if ($debug) {
+            echo "SI: " . $this->setIndex . "; max: " . (count($this->Set) - 1) . "\n";
+        }
+        if ($this->setIndex < (count($this->Set) - 1)) {
+            if ($debug) echo "HERE: ". $this->Set[$this->setIndex + 1];
             return $this->Set[$this->setIndex + 1];
         } else {
+            if ($debug) echo "NOT HERE";
             return false;
         }
     }
@@ -113,6 +155,16 @@ class Token {
             }
         }
         return false;
+    }
+    
+    protected function debugContext() {
+        foreach (array_reverse($this->getPrevTokens(10)) as $tok) {
+            echo "PREV: $tok\n";
+        }
+        echo "THIS: $this\n";
+        foreach ($this->getNextTokens(10) as $tok) {
+            echo "NEXT: $tok\n";
+        }
     }
     
     public function findMatchingBrace() {

@@ -27,9 +27,9 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         
     }
 
-    public function testSetString() {
-        $this->assertEquals("T_OPEN_TAG   <?php\n\nT_WHITESPACE             \nT_FUNCTION   function\nT_WHITESPACE  \nT_STRING     foo\n             (\n             )\nT_WHITESPACE  \n             {\nT_WHITESPACE \n            \n             }\n", (string)$this->SetFunction, 'toString failing');
-    }
+//    public function testSetString() {
+//        $this->assertEquals("T_OPEN_TAG   <?php\n\nT_WHITESPACE             \nT_FUNCTION   function\nT_WHITESPACE  \nT_STRING     foo\n             (\n             )\nT_WHITESPACE  \n             {\nT_WHITESPACE \n            \n             }\n", (string)$this->SetFunction, 'toString failing');
+//    }
     
     public function testTokenString() {
         $this->assertEquals('T_FUNCTION(#2) function', (string)$this->SetFunction[2]);

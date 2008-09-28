@@ -47,17 +47,23 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     
     public function __toString() {
         $tokenWidth = 0;
+        $tokenClassWidth = 0;
+        $lineWidth = 0;
         $data = array();
         
         // negotiate width (pass 1)
         foreach ($this->tokens as $t) {
             $tokenWidth = max($tokenWidth, strlen($t->name()));
+            $tokenClassWidth = max($tokenClassWidth, strlen(get_class($t)));
+            $lineWidth = max($lineWidth, strlen($t->line()));
         }
         
         // paint (pass 2)
         $ret = '';
         foreach ($this->tokens as $t) {
+            $ret .= str_pad($t->line(), $lineWidth + 1, ' ', STR_PAD_RIGHT);
             $ret .= str_pad($t->name(), $tokenWidth + 1, ' ', STR_PAD_RIGHT);
+            $ret .= str_pad(get_class($t), $tokenClassWidth + 1, ' ', STR_PAD_RIGHT);
             $ret .= $t->value() . "\n";
         }
         return $ret;
