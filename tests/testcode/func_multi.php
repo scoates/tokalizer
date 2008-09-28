@@ -11,3 +11,8 @@ class bar {
 
 function solofunc() {}
 
+$x = new bar;
+$x = new bar();
+$x->foofunc();
+
+solofunc();
