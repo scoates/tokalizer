@@ -82,7 +82,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     protected function parseFunctionCalls() {
         foreach ($this->tokens as $t) {
             if ($t instanceof FunctionCallToken) {
-                $this->functionCalls[] = $t->conjureFunctionCall();
+                $this->functionCalls[] = $t;
             }
         }
     }
@@ -113,6 +113,10 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     
     public function getFile() {
         return $this->file;
+    }
+    
+    public function getFunctionCalls() {
+        return $this->functionCalls;
     }
     
     // iterator implementation

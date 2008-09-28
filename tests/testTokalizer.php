@@ -120,4 +120,19 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertNull($funcs[3]->getClass());
     }
     
+    public function testFunctionCallsCount() {
+        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $this->assertEquals(7, count($calls));
+    }
+    
+    public function testFunctionCallsType() {
+        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $this->assertTrue($calls[0] instanceof ConstructorFunctionCallToken);
+        $this->assertTrue($calls[1] instanceof ObjectFunctionCallToken);
+        $this->assertTrue($calls[2] instanceof ConstructorFunctionCallToken);
+        $this->assertTrue($calls[3] instanceof ConstructorFunctionCallToken);
+        $this->assertTrue($calls[4] instanceof ObjectFunctionCallToken);
+        $this->assertTrue($calls[5] instanceof StaticFunctionCallToken);
+        $this->assertTrue($calls[6] instanceof ProceduralFunctionCallToken);
+    }
 }

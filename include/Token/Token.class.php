@@ -46,7 +46,7 @@ class Token {
             case T_STRING:
                 // T_STRING can be a function call; let's check:
                 $prev = $this->getPrevTokens(2);
-                $next = $this->getPrevTokens(1);
+                $next = $this->getNextTokens(1);
                 
                 // first check is constructor (easy to check because of "new")
                 // but constructor doesn't require parens
@@ -56,7 +56,7 @@ class Token {
                 }
                 
                 // check for other types
-                if ($next[0]->value != '(' && count($prev) == 2) {
+                if ($next[0]->value == '(' && count($prev) == 2) {
                     // if the next token is an open paren, then we have a function call:
                     switch ($prev[0]->type) {
                         case T_PAAMAYIM_NEKUDOTAYIM: // "::" (-;
