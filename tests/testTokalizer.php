@@ -9,6 +9,7 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     protected $SetClass;
     protected $SetClassExtends;
     protected $SetClassAbstract;
+    protected $SetFuncMulti;
 
     public function setUp() {
         $this->SetFunction = new TokenSet('<?php
@@ -21,6 +22,8 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->SetClassExtends = TokenSet::fromFile('testcode/class_extends.php');
         
         $this->SetClassAbstract = TokenSet::fromFile('testcode/class_abstract.php');
+        
+        $this->SetFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
         
     }
 
@@ -103,6 +106,18 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertFalse($classes[0]->getAbstract());
         $classes = $this->SetClassAbstract->getClasses();
         $this->assertTrue($classes[0]->getAbstract());
+    }
+    
+    public function testFuncMultiClass() {
+        $funcs = $this->SetFuncMulti->getFunctions();
+        $this->assertEquals('foofunc', $funcs[0]->name());
+        $this->assertEquals('foo', $funcs[0]->getClass());
+        $this->assertEquals('barfunc', $funcs[1]->name());
+        $this->assertEquals('bar', $funcs[1]->getClass());
+        $this->assertEquals('barfunc2', $funcs[2]->name());
+        $this->assertEquals('bar', $funcs[2]->getClass());
+        $this->assertEquals('solofunc', $funcs[3]->name());
+        $this->assertNull($funcs[3]->getClass());
     }
     
 }
