@@ -27,6 +27,7 @@ class Token {
                 case T_CLASS:
                     return new ClassToken($token, $Set);
                     break; // semantics (-:
+                
                 case T_FUNCTION:
                     return new FunctionToken($token, $Set);
                     break; // semantics (-:
@@ -34,6 +35,11 @@ class Token {
         }
         // fallthrough to regular Token
         return new Token($token, $Set);
+    }
+    
+    public function mutate() {
+        // no mutation for now
+        return $this;
     }
     
     private function __construct($token, TokenSet $Set) {

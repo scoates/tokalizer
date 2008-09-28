@@ -31,11 +31,16 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
 
     public function __construct($source, $file = null) {
         $this->file = $file;
+        // pass 1: non-contextual tokens
         foreach (token_get_all($source) as $t) {
             $this->max = count($this->tokens); // one less than the number of tokens
             $Token = Token::conjure($t, $this);
             $this->tokens[] = $Token;
             $this->currentLine += substr_count($Token->value(), "\n");
+        }
+        // pass 2: contextual tokens
+        for ($i=0; $i<count($this->tokens); $i++) {
+            $this->tokens[$i] = $this->tokens[$i]->mutate();
         }
         $this->parse();
     }
