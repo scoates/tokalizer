@@ -1,8 +1,8 @@
 <?php
-require dirname(__FILE__) . '/Token.class.php';
-require dirname(__FILE__) . '/AbstractDefinition.class.php';
-require dirname(__FILE__) . '/ClassDefinition.class.php';
-require dirname(__FILE__) . '/FunctionDefinition.class.php';
+require dirname(__FILE__) . '/Token/Token.class.php';
+require dirname(__FILE__) . '/Definition/AbstractDefinition.class.php';
+require dirname(__FILE__) . '/Definition/ClassDefinition.class.php';
+require dirname(__FILE__) . '/Definition/FunctionDefinition.class.php';
 
 class TokenSet implements Iterator, ArrayAccess, Countable {
     
@@ -20,7 +20,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         'functions' => array(), // of FunctionDefinitions
     );
     
-    protected $functionCalls;
+    protected $functionCalls = array();
     
     public static function fromFile($file) {
         if (!is_readable($file)) {
@@ -71,8 +71,12 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
 /*
     protected function parseFunctionCalls() {
         foreach ($this->tokens as $t) {
-            if ($t->type() == T_FUNCTION) {
-                $this->definitions['functions'][] = new FunctionDefinition($t);
+            if ($t->type() == T_STRING) {
+                $next = $t->getNextTokens(1);
+                if ($next[0]->value() == '(') {
+                    echo "$t\n";
+                    //$this->functionCalls[] = new FunctionCall($t);
+                }
             }
         }
     }
