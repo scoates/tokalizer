@@ -135,4 +135,31 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertTrue($calls[5] instanceof StaticFunctionCallToken);
         $this->assertTrue($calls[6] instanceof ProceduralFunctionCallToken);
     }
+    
+    public function testFunctionCallsFunctionName() {
+        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $this->assertEquals('foo', $calls[0]->functionName());
+        $this->assertEquals('foofunc', $calls[1]->functionName());
+        $this->assertEquals('bar', $calls[2]->functionName());
+        $this->assertEquals('bar', $calls[3]->functionName());
+        $this->assertEquals('foofunc', $calls[4]->functionName());
+        $this->assertEquals('barfunc2', $calls[5]->functionName());
+        $this->assertEquals('solofunc', $calls[6]->functionName());
+    }
+    
+    public function testFunctionCallsSimpleClassName() {
+        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $this->assertEquals('foo', $calls[0]->className());
+        $this->assertEquals('bar', $calls[2]->className());
+        $this->assertEquals('bar', $calls[3]->className());
+        $this->assertEquals('bar', $calls[5]->className());
+        $this->assertNull($calls[6]->className());
+    }
+
+    public function testFunctionCallsComplexClassName() {
+        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $this->assertEquals('foo', $calls[1]->className());
+        $this->assertEquals('bar', $calls[4]->className());
+    }
+
 }

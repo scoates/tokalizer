@@ -8,7 +8,7 @@ abstract class FunctionCallToken extends Token {
     public function __construct($token, TokenSet $Set, $setIndex) {
         parent::__construct($token, $Set, $setIndex);
         $this->functionName = $this->value;
-        $this->determineClassName();
+        $this->className = $this->determineClassName();
     }
 
     public function functionName() {
@@ -16,6 +16,6 @@ abstract class FunctionCallToken extends Token {
     }
     
     public function className() {
-        return $this->className();
+        return $this->className;
     }
 }
