@@ -26,6 +26,10 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->SetFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
         
     }
+    
+    public function testSetReconstruct() {
+        $this->assertEquals(file_get_contents('testcode/class_simple.php'), $this->SetClass->reconstruct());
+    }
 
 //    public function testSetString() {
 //        $this->assertEquals("T_OPEN_TAG   <?php\n\nT_WHITESPACE             \nT_FUNCTION   function\nT_WHITESPACE  \nT_STRING     foo\n             (\n             )\nT_WHITESPACE  \n             {\nT_WHITESPACE \n            \n             }\n", (string)$this->SetFunction, 'toString failing');

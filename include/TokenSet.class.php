@@ -69,6 +69,14 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         return $ret;
     }
     
+    public function reconstruct() {
+        $ret = '';
+        foreach ($this->tokens as $t) {
+            $ret .= $t->value();
+        }
+        return $ret;
+    }
+    
     public function currentLine() {
         return $this->currentLine;
     }
