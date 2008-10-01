@@ -17,6 +17,9 @@ abstract class AbstractDefinition {
     }
     
     public function occupiesLine($line) {
+        if (is_bool($this->EndToken)) {
+            echo $this;
+        }
         return $this->StartToken->line() <= $line && $this->EndToken->line() >= $line;
     }
 

@@ -16,7 +16,7 @@ class FunctionDefinition extends AbstractDefinition {
         $this->static = $t->getStatic();
         $this->StartToken = $t->getStartToken($this->visibility, $this->static);
         $openBrace = $t->findOpenBrace();
-        $this->EndToken = $openBrace->findMatchingBrace();
+        $this->EndToken = $openBrace->findMatchingBrace('FunctionEndToken');
         $this->class = $this->determineClass();
     }
     

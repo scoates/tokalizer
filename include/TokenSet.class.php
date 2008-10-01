@@ -66,6 +66,10 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         return $ret;
     }
     
+    public function replace($index, Token $token) {
+        $this->tokens[$index] = $token;
+    }
+    
     public function getContext($line) {
         $classname = '';
         foreach ($this->definitions['classes'] as $C) {

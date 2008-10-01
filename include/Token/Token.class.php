@@ -1,7 +1,9 @@
 <?php
 
 require dirname(__FILE__) . '/ClassToken.class.php';
+require dirname(__FILE__) . '/ClassEndToken.class.php';
 require dirname(__FILE__) . '/FunctionToken.class.php';
+require dirname(__FILE__) . '/FunctionEndToken.class.php';
 require dirname(__FILE__) . '/AbstractFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
@@ -175,7 +177,22 @@ class Token {
         }
     }
     
-    public function findMatchingBrace() {
+    public function become($type) {
+        switch ($type) {
+            case 'FunctionEndToken':
+                $new = new FunctionEndToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                break;
+            case 'ClassEndToken':
+                $new = new ClassEndToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                break;
+            default:
+                return $this;
+        }
+        $this->Set->replace($this->setIndex, $new);
+        return $new;
+    }
+    
+    public function findMatchingBrace($becomeType = 'Token') {
         $this->ensureValue('{');
         $t = $this;
         $depth = 1;
@@ -195,7 +212,11 @@ class Token {
                     break;
             }
             if (0 == $depth) {
-                return $t;
+                if ($becomeType) {
+                    return $t->become($becomeType);
+                } else {
+                    return $t;
+                }
             }
         }
         return false;
