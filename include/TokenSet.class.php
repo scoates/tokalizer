@@ -12,9 +12,6 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     protected $tokens = array();
     protected $currentLine = 1;
     
-    // TODO:
-    protected $currentContext = array('root');
-    
     protected $definitions = array(
         'classes' => array(), // of ClassDefinitions
         'functions' => array(), // of FunctionDefinitions
@@ -67,6 +64,29 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
             $ret .= $t->value() . "\n";
         }
         return $ret;
+    }
+    
+    public function getContext($line) {
+        $classname = '';
+        foreach ($this->definitions['classes'] as $C) {
+            if ($C->occupiesLine($line)) {
+                $classname = $C->name();
+            }
+        }
+        $funcname = '';
+        foreach ($this->definitions['functions'] as $F) {
+            if ($F->occupiesLine($line)) {
+                $funcname = $F->name() ;
+            }
+        }
+        if ($classname && $funcname) {
+            return "{$classname}::{$funcname}()";
+        } else if ($classname) {
+            return "{$classname} (class)";
+        } else if ($funcname) {
+            return "{$funcname}()";
+        }
+        return null;
     }
     
     public function reconstruct() {

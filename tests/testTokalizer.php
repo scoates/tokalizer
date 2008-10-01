@@ -165,5 +165,11 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo', $calls[1]->className());
         $this->assertEquals('bar', $calls[4]->className());
     }
+    
+    public function testSetGetContext() {
+        $this->assertEquals('foo (class)', $this->SetFuncMulti->getContext(3));
+        $this->assertEquals('bar::barfunc()', $this->SetFuncMulti->getContext(10));
+        $this->assertNull($this->SetFuncMulti->getContext(17));
+    }
 
 }
