@@ -61,7 +61,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
             $ret .= str_pad($t->line(), $lineWidth + 1, ' ', STR_PAD_RIGHT);
             $ret .= str_pad($t->name(), $tokenWidth + 1, ' ', STR_PAD_RIGHT);
             $ret .= str_pad(get_class($t), $tokenClassWidth + 1, ' ', STR_PAD_RIGHT);
-            $ret .= $t->value() . "\n";
+            $ret .= trim($t->value()) . "\n";
         }
         return $ret;
     }
