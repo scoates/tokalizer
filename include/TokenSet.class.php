@@ -71,12 +71,14 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         foreach ($this->definitions['classes'] as $C) {
             if ($C->occupiesLine($line)) {
                 $classname = $C->name();
+                break;
             }
         }
         $funcname = '';
         foreach ($this->definitions['functions'] as $F) {
             if ($F->occupiesLine($line)) {
                 $funcname = $F->name() ;
+                break;
             }
         }
         if ($classname && $funcname) {
