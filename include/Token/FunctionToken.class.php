@@ -19,7 +19,7 @@ class FunctionToken extends Token {
             switch ($prev->type()) {
                 case T_PUBLIC:
                 case T_PROTECTED:
-                case T_PPRIVATE:
+                case T_PRIVATE:
                     $visibility = $prev->type();
                     break;
             }
