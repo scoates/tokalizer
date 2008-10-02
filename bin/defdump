@@ -4,6 +4,7 @@
 require dirname(__FILE__) . '/../include/TokenSet.class.php';
 
 $ts = TokenSet::fromFile($_SERVER['argv'][1]);
+$ts->parse();
 
 $numClasses = count($ts->getClasses());
 echo "Classes: {$numClasses}\n";

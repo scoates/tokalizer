@@ -86,7 +86,7 @@ class Token {
         return $this;
     }
     
-    protected function __construct($token, TokenSet $Set, $setIndex = null) {
+    protected function __construct($token, TokenSet $Set, $setIndex = null, $line = null) {
         $this->Set = $Set;
         if ($setIndex == null) {
             $setIndex = count($Set) - 1;
@@ -99,7 +99,7 @@ class Token {
             $this->type = null;
             $this->value = $token;
         }
-        $this->line = $Set->currentLine();
+        $this->line = is_null($line) ? $Set->currentLine() : $line;
     }
     
     public function __toString() {
@@ -180,10 +180,10 @@ class Token {
     public function become($type) {
         switch ($type) {
             case 'FunctionEndToken':
-                $new = new FunctionEndToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                $new = new FunctionEndToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
                 break;
             case 'ClassEndToken':
-                $new = new ClassEndToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                $new = new ClassEndToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
                 break;
             default:
                 return $this;
@@ -212,11 +212,7 @@ class Token {
                     break;
             }
             if (0 == $depth) {
-                if ($becomeType) {
-                    return $t->become($becomeType);
-                } else {
-                    return $t;
-                }
+                return $t->become($becomeType);
             }
         }
         return false;

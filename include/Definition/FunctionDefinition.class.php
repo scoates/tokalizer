@@ -48,7 +48,8 @@ class FunctionDefinition extends AbstractDefinition {
             $ret .= "file: {$file}; ";
         }
         $line = $this->StartToken->line();
-        $ret .= "line: {$line})";
+        $endLine = $this->EndToken->line();
+        $ret .= "line(s): {$line} to {$endLine})";
         return  $ret;
     }
 

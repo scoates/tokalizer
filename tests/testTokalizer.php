@@ -16,14 +16,19 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
             function foo() {
             }'
         );
+        $this->SetFunction->parse();
         
         $this->SetClass = TokenSet::fromFile('testcode/class_simple.php');
+        $this->SetClass->parse();
         
         $this->SetClassExtends = TokenSet::fromFile('testcode/class_extends.php');
+        $this->SetClassExtends->parse();
         
         $this->SetClassAbstract = TokenSet::fromFile('testcode/class_abstract.php');
+        $this->SetClassAbstract->parse();
         
         $this->SetFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
+        $this->SetFuncMulti->parse();
         
     }
     

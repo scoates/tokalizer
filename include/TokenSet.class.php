@@ -39,7 +39,6 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         for ($i=0; $i<count($this->tokens); $i++) {
             $this->tokens[$i] = $this->tokens[$i]->mutate();
         }
-        $this->parse();
     }
     
     public function __toString() {
@@ -107,13 +106,14 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         return $this->currentLine;
     }
     
-    protected function parse() {
+    public function parse() {
         $this->parseClassDefinitions();
         $this->parseFunctionDefinitions();
         $this->parseFunctionCalls();
     }
     
-    protected function parseFunctionCalls() {
+    public function parseFunctionCalls() {
+        $this->functionCalls = array();
         foreach ($this->tokens as $t) {
             if ($t instanceof FunctionCallToken) {
                 $this->functionCalls[] = $t;
@@ -121,7 +121,8 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         }
     }
     
-    protected function parseFunctionDefinitions() {
+    public function parseFunctionDefinitions() {
+        $this->definitions['functions'] = array();
         foreach ($this->tokens as $t) {
             if ($t instanceof FunctionToken) {
                 $this->definitions['functions'][] = new FunctionDefinition($t);
@@ -129,7 +130,8 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         }
     }
     
-    protected function parseClassDefinitions() {
+    public function parseClassDefinitions() {
+        $this->definitions['classes'] = array();
         foreach ($this->tokens as $t) {
             if ($t instanceof ClassToken) {
                 $this->definitions['classes'][] = new ClassDefinition($t);
