@@ -122,11 +122,23 @@ class Token {
         $this->line = is_null($line) ? $Set->currentLine() : $line;
     }
     
-    public function __toString() {
+    protected function ensureOutput() {
         if ($this->Output === null) {
-            throw new Exception('Token has no output object');
+            // Token has no output object
+            // can't throw an exception from __toString, so: default
+            $this->Output = new TextTokenOutput;
+            $this->Output->setToken($this);
         }
+    }
+    
+    public function __toString() {
+        $this->ensureOutput();
         return $this->Output->render();
+    }
+    
+    public function reconstruct() {
+        $this->ensureOutput();
+        return $this->Output->reconstruct();
     }
     
     public function getName() {
@@ -278,5 +290,29 @@ class Token {
     
     public function getSetIndex() {
         return $this->setIndex;
+    }
+    
+    public function setOutputStyle($style) {
+        switch ($style) {
+            case TokenOutput::STYLE_TEXT:
+                if ($this->Output instanceof TextTokenOutput) {
+                    // no need to change, so short circuit
+                    return;
+                }
+                $this->Output = new TextTokenOutput;
+                break;
+            
+            case TokenOutput::STYLE_HTML:
+                if ($this->Output instanceof HtmlTokenOutput) {
+                    // no need to change, so short circuit
+                    return;
+                }
+                $this->Output = new HtmlTokenOutput;
+                break;
+            
+            default:
+                throw new Exception('Invalid output style');
+        }
+        $this->Output->setToken($this);
     }
 }
