@@ -1,5 +1,5 @@
 <?php
-class FunctionDefinition extends AbstractDefinition {
+class FunctionDefinition extends Definition {
     protected $FunctionToken;
     protected $class; // ClassDefinition
     protected $visibility;

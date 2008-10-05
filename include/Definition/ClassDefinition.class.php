@@ -1,5 +1,5 @@
 <?php
-class ClassDefinition extends AbstractDefinition {
+class ClassDefinition extends Definition {
     protected $ClassToken;
     protected $extends = null;
     protected $abstract;

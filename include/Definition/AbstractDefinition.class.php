@@ -1,5 +1,5 @@
 <?php
-abstract class AbstractDefinition {
+abstract class Definition {
     protected $name;
     protected $StartToken;
     protected $EndToken;
