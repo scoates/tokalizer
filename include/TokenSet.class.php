@@ -36,7 +36,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
             $this->max = count($this->tokens); // one less than the number of tokens
             $Token = Token::conjure($t, $this);
             $this->tokens[] = $Token;
-            $this->currentLine += substr_count($Token->value(), "\n");
+            $this->currentLine += substr_count($Token->getValue(), "\n");
         }
         // pass 2: contextual tokens
         for ($i=0; $i<count($this->tokens); $i++) {
@@ -52,7 +52,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         
         // negotiate width (pass 1)
         foreach ($this->tokens as $t) {
-            $tokenWidth = max($tokenWidth, strlen($t->name()));
+            $tokenWidth = max($tokenWidth, strlen($t->getName()));
             $tokenClassWidth = max($tokenClassWidth, strlen(get_class($t)));
             $lineWidth = max($lineWidth, strlen($t->line()));
         }
@@ -61,9 +61,9 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         $ret = '';
         foreach ($this->tokens as $t) {
             $ret .= str_pad($t->line(), $lineWidth + 1, ' ', STR_PAD_RIGHT);
-            $ret .= str_pad($t->name(), $tokenWidth + 1, ' ', STR_PAD_RIGHT);
+            $ret .= str_pad($t->getName(), $tokenWidth + 1, ' ', STR_PAD_RIGHT);
             $ret .= str_pad(get_class($t), $tokenClassWidth + 1, ' ', STR_PAD_RIGHT);
-            $ret .= trim($t->value()) . "\n";
+            $ret .= trim($t->getValue()) . "\n";
         }
         return $ret;
     }
@@ -76,14 +76,14 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         $classname = '';
         foreach ($this->definitions['classes'] as $C) {
             if ($C->occupiesLine($line)) {
-                $classname = $C->name();
+                $classname = $C->getName();
                 break;
             }
         }
         $funcname = '';
         foreach ($this->definitions['functions'] as $F) {
             if ($F->occupiesLine($line)) {
-                $funcname = $F->name() ;
+                $funcname = $F->getName() ;
                 break;
             }
         }
@@ -100,7 +100,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     public function reconstruct() {
         $ret = '';
         foreach ($this->tokens as $t) {
-            $ret .= $t->value();
+            $ret .= $t->getValue();
         }
         return $ret;
     }

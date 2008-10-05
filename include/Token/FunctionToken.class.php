@@ -16,11 +16,11 @@ class FunctionToken extends Token {
         $visibility = null;
         foreach ($this->getPrevTokens(2) as $prev) {
             // check those tokens for visibility;
-            switch ($prev->type()) {
+            switch ($prev->getType()) {
                 case T_PUBLIC:
                 case T_PROTECTED:
                 case T_PRIVATE:
-                    $visibility = $prev->type();
+                    $visibility = $prev->getType();
                     break;
             }
         }
@@ -32,7 +32,7 @@ class FunctionToken extends Token {
         $static = null;
         foreach ($this->getPrevTokens(2) as $prev) {
             // check those tokens for static
-            switch ($prev->type()) {
+            switch ($prev->getType()) {
                 case T_STATIC:
                     $static = true;
                     break;

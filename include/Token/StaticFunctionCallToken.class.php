@@ -8,9 +8,9 @@ class StaticFunctionCallToken extends FunctionCallToken {
     }
     
     protected function determineClassName() {
-        if ($this->classToken->type() == T_STRING) {
+        if ($this->classToken->getType() == T_STRING) {
             // static string
-            return $this->classToken->value();
+            return $this->classToken->getValue();
         } else {
             throw new Exception('Invalid class name...');
         }

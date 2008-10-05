@@ -11,7 +11,7 @@ class FunctionDefinition extends Definition {
     
     public function __construct(FunctionToken $t) {
         $this->FunctionToken = $t;
-        $this->name = $t->getNameToken()->value();
+        $this->name = $t->getNameToken()->getValue();
         $this->visibility = $t->getVisibility();
         $this->static = $t->getStatic();
         $this->StartToken = $t->getStartToken($this->visibility, $this->static);
@@ -24,7 +24,7 @@ class FunctionDefinition extends Definition {
     protected function determineClass() {
         foreach ($this->FunctionToken->set()->getClasses() as $class) {
             if ($class->occupiesLine($this->FunctionToken->line())) {
-                return $class->name();
+                return $class->getName();
             }
         }
         return null;

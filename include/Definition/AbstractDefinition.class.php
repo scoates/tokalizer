@@ -5,7 +5,7 @@ abstract class Definition {
     protected $EndToken;
     protected $Output = null;
 
-    public function name() {
+    public function getName() {
         return $this->name;
     }
     

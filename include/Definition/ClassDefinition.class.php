@@ -6,7 +6,7 @@ class ClassDefinition extends Definition {
     
     public function __construct(ClassToken $t) {
         $this->ClassToken = $t;
-        $this->name = $t->getNameToken()->value();
+        $this->name = $t->getNameToken()->getValue();
         $this->StartToken = $t->getStartToken();
         $openBrace = $t->findOpenBrace();
         $this->EndToken = $openBrace->findMatchingBrace('ClassEndToken');

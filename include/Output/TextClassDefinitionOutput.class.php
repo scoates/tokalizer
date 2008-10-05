@@ -2,7 +2,7 @@
 
 class TextClassDefinitionOutput extends DefinitionOutput {
     public function render() {
-        $ret = 'class ' . $this->Definition->name() . '(';
+        $ret = 'class ' . $this->Definition->getName() . '(';
         $file = $this->Definition->getClassToken()->Set()->getFile();
         if ($file) {
             $ret .= "file: {$file}; ";

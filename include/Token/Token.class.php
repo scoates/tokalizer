@@ -129,15 +129,15 @@ class Token {
         return $this->Output->render();
     }
     
-    public function name() {
+    public function getName() {
         return $this->type ? token_name($this->type) : null;
     }
     
-    public function value() {
+    public function getValue() {
         return $this->value;
     }
     
-    public function type() {
+    public function getType() {
         return $this->type;
     }
     
@@ -183,7 +183,7 @@ class Token {
     public function findOpenBrace() {
         $t = $this;
         while ($t = $t->next()) {
-            if ($t->value() == '{') {
+            if ($t->getValue() == '{') {
                 return $t;
             }
         }
@@ -220,9 +220,9 @@ class Token {
         $t = $this;
         $depth = 1;
         while ($t = $t->next()) {
-            $br = $t->type();
+            $br = $t->getType();
             if ($br == null) {
-                $br = $t->value();
+                $br = $t->getValue();
             }
             switch ($br) {
                 case '{':
@@ -260,7 +260,7 @@ class Token {
                 // ran out of tokens...
                 break;
             }
-            if (!$skipWhitespace || $t->type() != T_WHITESPACE) {
+            if (!$skipWhitespace || $t->getType() != T_WHITESPACE) {
                 ++$found;
                 $tokens[] = $t;
             }

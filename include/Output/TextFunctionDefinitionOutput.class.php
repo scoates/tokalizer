@@ -3,7 +3,7 @@
 class TextFunctionDefinitionOutput extends DefinitionOutput {
     public function render() {
         
-        $name = $this->Definition->getClass() ? ($this->Definition->getClass() . '::' . $this->Definition->name()) : $this->Definition->name();
+        $name = $this->Definition->getClass() ? ($this->Definition->getClass() . '::' . $this->Definition->getName()) : $this->Definition->getName();
         $ret = '';
         if ($this->Definition->getVisibility()) {
             $ret .= FunctionToken::visibilityName($this->Definition->getVisibility()) . ' ';

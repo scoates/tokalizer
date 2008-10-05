@@ -45,15 +45,15 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
     
     public function testTokenName() {
-        $this->assertEquals('T_FUNCTION', $this->SetFunction[2]->name());
+        $this->assertEquals('T_FUNCTION', $this->SetFunction[2]->getName());
     }
     
     public function testTokenType() {
-        $this->assertEquals(T_FUNCTION, $this->SetFunction[2]->type());
+        $this->assertEquals(T_FUNCTION, $this->SetFunction[2]->getType());
     }
     
     public function testTokenValue() {
-        $this->assertEquals('function', $this->SetFunction[2]->value());
+        $this->assertEquals('function', $this->SetFunction[2]->getValue());
     }
     
     public function testSetCount() {
@@ -119,13 +119,13 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     
     public function testFuncMultiClass() {
         $funcs = $this->SetFuncMulti->getFunctions();
-        $this->assertEquals('foofunc', $funcs[0]->name());
+        $this->assertEquals('foofunc', $funcs[0]->getName());
         $this->assertEquals('foo', $funcs[0]->getClass());
-        $this->assertEquals('barfunc', $funcs[1]->name());
+        $this->assertEquals('barfunc', $funcs[1]->getName());
         $this->assertEquals('bar', $funcs[1]->getClass());
-        $this->assertEquals('barfunc2', $funcs[2]->name());
+        $this->assertEquals('barfunc2', $funcs[2]->getName());
         $this->assertEquals('bar', $funcs[2]->getClass());
-        $this->assertEquals('solofunc', $funcs[3]->name());
+        $this->assertEquals('solofunc', $funcs[3]->getName());
         $this->assertNull($funcs[3]->getClass());
     }
     
