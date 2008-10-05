@@ -22,7 +22,7 @@ class Token {
     
     protected $type;
     protected $value;
-    protected $Output;
+    protected $Output = null;
     
     protected $line;
     
@@ -123,6 +123,9 @@ class Token {
     }
     
     public function __toString() {
+        if ($this->Output === null) {
+            throw new Exception('Token has no output object');
+        }
         return $this->Output->render();
     }
     
