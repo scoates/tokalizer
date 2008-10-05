@@ -9,6 +9,8 @@ require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
 require dirname(__FILE__) . '/StaticFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
+require dirname(__FILE__) . '/../output/AbstractTokenOutput.class.php';
+require dirname(__FILE__) . '/../output/TextTokenOutput.class.php';
 
 class Token {
     
@@ -20,23 +22,36 @@ class Token {
     
     protected $type;
     protected $value;
+    protected $Output;
     
     protected $line;
     
-    public static function conjure($token, TokenSet $Set) {
+    public static function conjure($token, TokenSet $Set, TokenOutput $Output = null) {
         if (is_array($token)) {
             switch ($token[0]) {
                 case T_CLASS:
-                    return new ClassToken($token, $Set);
+                    $T = new ClassToken($token, $Set);
                     break; // semantics (-:
                 
                 case T_FUNCTION:
-                    return new FunctionToken($token, $Set);
+                    $T = new FunctionToken($token, $Set);
                     break; // semantics (-:
+                
+                default:
+                    // fall through to regular Token
+                    $T = new Token($token, $Set);
             }
+        } else {
+            // fall through to regular Token
+            $T = new Token($token, $Set);
         }
-        // fall through to regular Token
-        return new Token($token, $Set);
+        
+        if ($Output == null) {
+            $Output = new TextTokenOutput;
+        }
+        
+        $T->setOutput($Output);
+        return $T;
     }
     
     public function mutate() {
@@ -86,6 +101,11 @@ class Token {
         return $this;
     }
     
+    public function setOutput(TokenOutput $Output) {
+        $this->Output = $Output;
+        $this->Output->setToken($this);
+    }
+    
     protected function __construct($token, TokenSet $Set, $setIndex = null, $line = null) {
         $this->Set = $Set;
         if ($setIndex == null) {
@@ -103,7 +123,7 @@ class Token {
     }
     
     public function __toString() {
-        return $this->name() . '(#' . $this->setIndex . ') ' . $this->value();
+        return $this->Output->render();
     }
     
     public function name() {
@@ -253,4 +273,7 @@ class Token {
         return $this->getTokens(self::DIR_NEXT, $num, $skipWhitespace);
     }
     
+    public function getSetIndex() {
+        return $this->setIndex;
+    }
 }
