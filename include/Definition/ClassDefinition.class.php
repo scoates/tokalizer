@@ -12,6 +12,7 @@ class ClassDefinition extends Definition {
         $this->EndToken = $openBrace->findMatchingBrace('ClassEndToken');
         $this->abstract = $t->getAbstract();
         $this->extends = $t->getExtends();
+        $this->setOutput(new TextClassDefinitionOutput($this));
     }
     
     public function getExtends() {
@@ -22,15 +23,7 @@ class ClassDefinition extends Definition {
         return $this->abstract;
     }
     
-    public function __toString() {
-        $ret = "class {$this->name} (";
-        $file = $this->ClassToken->Set()->getFile();
-        if ($file) {
-            $ret .= "file: {$file}; ";
-        }
-        $line = $this->StartToken->line();
-        $endLine = $this->EndToken->line();
-        $ret .= "line(s): {$line} to {$endLine})";
-        return  $ret;
+    public function getClassToken() {
+        return $this->ClassToken;
     }
 }

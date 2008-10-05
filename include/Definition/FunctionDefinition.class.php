@@ -18,6 +18,7 @@ class FunctionDefinition extends Definition {
         $openBrace = $t->findOpenBrace();
         $this->EndToken = $openBrace->findMatchingBrace('FunctionEndToken');
         $this->class = $this->determineClass();
+        $this->setOutput(new TextFunctionDefinitionOutput($this));
     }
     
     protected function determineClass() {
@@ -32,25 +33,12 @@ class FunctionDefinition extends Definition {
     public function getClass() {
         return $this->class;
     }
-
-    public function __toString() {
-        $name = $this->class ? ($this->class . '::' . $this->name) : $this->name();
-        $ret = '';
-        if ($this->visibility) {
-            $ret .= FunctionToken::visibilityName($this->visibility) . ' ';
-        }
-        if ($this->static) {
-            $ret .= 'static ';
-        }
-        $ret .= "function {$name} (";
-        $file = $this->FunctionToken->Set()->getFile();
-        if ($file) {
-            $ret .= "file: {$file}; ";
-        }
-        $line = $this->StartToken->line();
-        $endLine = $this->EndToken->line();
-        $ret .= "line(s): {$line} to {$endLine})";
-        return  $ret;
+    
+    public function getVisibility() {
+        return $this->visibility;
     }
-
+    
+    public function getFunctionToken() {
+        return $this->FunctionToken;
+    }
 }

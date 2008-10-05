@@ -3,6 +3,9 @@ require dirname(__FILE__) . '/Token/Token.class.php';
 require dirname(__FILE__) . '/Definition/AbstractDefinition.class.php';
 require dirname(__FILE__) . '/Definition/ClassDefinition.class.php';
 require dirname(__FILE__) . '/Definition/FunctionDefinition.class.php';
+require dirname(__FILE__) . '/Output/AbstractDefinitionOutput.class.php';
+require dirname(__FILE__) . '/Output/TextClassDefinitionOutput.class.php';
+require dirname(__FILE__) . '/Output/TextFunctionDefinitionOutput.class.php';
 
 class TokenSet implements Iterator, ArrayAccess, Countable {
     
