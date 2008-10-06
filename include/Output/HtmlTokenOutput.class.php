@@ -9,17 +9,27 @@ class HtmlTokenOutput extends TextTokenOutput {
             $anchor .= self::makeSlug($file . '-' . $this->Token->getSetIndex());
         }
         $class = strtolower(get_class($this->Token));
+        
         // a tag
         $ret = '<a ';
+        
         // class
         $ret .= 'class="token ' . strtolower($this->Token->getName());
-        $ret .= ($class == 'token' ? '' : " $class")  .'" ';
+        $ret .= ($class == 'token' ? '' : " $class");
+        if ($this->Token instanceof HtmlOutputDecoration) {
+            $ret .= ($x = $this->Token->decorate_class()) ? " $x" : '';
+        }
+        $ret .= '" ';
+        
         // title
         $ret .= 'title="Token #' . $this->Token->getSetIndex();
+        if ($this->Token instanceof HtmlOutputDecoration) {
+            $ret .= ($x = $this->Token->decorate_title()) ? " $x" : '';
+        }
         $ret .= ($this->Token->getName() ? ', ' . $this->Token->getName() : '') .'" ';
+        
         // name
         $ret .= 'name="' . htmlentities($anchor, ENT_QUOTES, 'UTF-8');
-        
         $ret .= '">';
         
         // body

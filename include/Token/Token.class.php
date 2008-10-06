@@ -1,5 +1,6 @@
 <?php
 
+require dirname(__FILE__) . '/../Output/HtmlOutputDecoration.interface.php';
 require dirname(__FILE__) . '/ClassToken.class.php';
 require dirname(__FILE__) . '/ClassEndToken.class.php';
 require dirname(__FILE__) . '/FunctionToken.class.php';
@@ -9,8 +10,8 @@ require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
 require dirname(__FILE__) . '/StaticFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
-require dirname(__FILE__) . '/../output/AbstractTokenOutput.class.php';
-require dirname(__FILE__) . '/../output/TextTokenOutput.class.php';
+require dirname(__FILE__) . '/../Output/AbstractTokenOutput.class.php';
+require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';
 
 class Token {
     

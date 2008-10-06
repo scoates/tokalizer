@@ -1,6 +1,6 @@
 <?php
 
-class ClassToken extends Token {
+class ClassToken extends Token implements HtmlOutputDecoration {
     
     public static function conjure() {
         throw new Exception("Don't conjure specific types of token, use Token::conjure() instead");
@@ -28,4 +28,13 @@ class ClassToken extends Token {
         $prev = $this->getPrevTokens(1); // abstract(0) class
         return $prev[0]->getType() == T_ABSTRACT;
     }
+
+    public function decorate_class() {
+        return 'classdefinition';
+    }
+    
+    public function decorate_title() {
+        return 'class ' . $this->getNameToken()->getValue();
+    }
+
 }
