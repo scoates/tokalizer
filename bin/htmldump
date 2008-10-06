@@ -1,0 +1,29 @@
+#!/Users/sean/bin/php
+<?php
+
+require dirname(__FILE__) . '/../include/TokenSet.class.php';
+require dirname(__FILE__) . '/../include/Output/HtmlTokenOutput.class.php';
+
+$ts = TokenSet::fromFile($_SERVER['argv'][1]);
+$ts->parse();
+$ts->setOutputStyle(TokenOutput::STYLE_HTML);
+
+?>
+<html>
+    <head>
+        <meta http-equiv='content-type' content='text/html; charset=UTF-8'/>
+        <title>Tokalizer Output</title>
+    </head>
+    <body>
+        <style type="text/css">
+        a.token {
+            font-family: monospace;
+            white-space: pre;
+        }
+        a.token:hover {
+            background-color: yellow;
+        }
+        </style>
+        <?php echo $ts->reconstruct(); ?>
+    </body>
+</html>

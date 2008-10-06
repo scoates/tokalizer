@@ -2,6 +2,7 @@
 require_once 'PHPUnit/Framework.php';
 
 require '../include/TokenSet.class.php';
+require '../include/Output/HtmlTokenOutput.class.php';
 
 class TestTokalizer extends PHPUnit_Framework_TestCase {
 
@@ -175,6 +176,13 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo (class)', $this->SetFuncMulti->getContext(3));
         $this->assertEquals('bar::barfunc()', $this->SetFuncMulti->getContext(10));
         $this->assertNull($this->SetFuncMulti->getContext(17));
+    }
+    
+    public function testHtmlTokenOutputSlug() {
+        $this->assertEquals('foo-bar', HtmlTokenOutput::makeSlug('foo bar'));
+        $this->assertEquals('foo', HtmlTokenOutput::makeSlug('foo'));
+        $this->assertEquals('foo1', HtmlTokenOutput::makeSlug('foo'));
+        $this->assertEquals('foo2', HtmlTokenOutput::makeSlug('foo'));
     }
 
 }
