@@ -16,9 +16,6 @@ class HtmlTokenOutput extends TextTokenOutput {
         // class
         $ret .= 'class="token ' . strtolower($this->Token->getName());
         $ret .= ($class == 'token' ? '' : " $class");
-        if ($this->Token instanceof HtmlOutputDecoration) {
-            $ret .= ($x = $this->Token->decorate_class()) ? " $x" : '';
-        }
         $ret .= '" ';
         
         // title

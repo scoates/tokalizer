@@ -28,8 +28,6 @@ class ClassToken extends Token implements HtmlOutputDecoration {
         $prev = $this->getPrevTokens(1); // abstract(0) class
         return $prev[0]->getType() == T_ABSTRACT;
     }
-
-    public function decorate_class() {}
     
     public function decorate_title() {
         return 'class ' . $this->getNameToken()->getValue();

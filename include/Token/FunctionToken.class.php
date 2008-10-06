@@ -72,8 +72,6 @@ class FunctionToken extends Token implements HtmlOutputDecoration {
                 throw new Exception('Invalid visibility');
         }
     }
-
-    public function decorate_class() {}
     
     public function decorate_title() {
         return 'function ' . $this->getNameToken()->getValue();

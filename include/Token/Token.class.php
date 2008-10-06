@@ -10,6 +10,7 @@ require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
 require dirname(__FILE__) . '/StaticFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
+require dirname(__FILE__) . '/OpenBraceToken.class.php';
 require dirname(__FILE__) . '/../Output/AbstractTokenOutput.class.php';
 require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';
 
@@ -60,7 +61,8 @@ class Token {
             // only mutate Tokens (not special tokens found in the first pass)
             return $this;
         }
-        switch ($this->type) {
+        $type = $this->type ? $this->type : $this->value;
+        switch ($type) {
             case T_STRING:
                 // T_STRING can be a function call; let's check:
                 $prev = $this->getPrevTokens(2);
@@ -97,7 +99,13 @@ class Token {
                 // no match, so fall through to the default...
                 
                 break;
+            
+            case '{':
+                return new OpenBraceToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                break;
+            
         }
+        
         // fall through to no mutation
         return $this;
     }
@@ -187,12 +195,6 @@ class Token {
         return $this->Set;
     }
     
-    protected function ensureValue($value) {
-        if ($this->value != $value) {
-            throw new Exception('Must only be called when value is ' . $value);
-        }
-    }
-    
     public function findOpenBrace() {
         $t = $this;
         while ($t = $t->next()) {
@@ -226,32 +228,6 @@ class Token {
         }
         $this->Set->replace($this->setIndex, $new);
         return $new;
-    }
-    
-    public function findMatchingBrace($becomeType = 'Token') {
-        $this->ensureValue('{');
-        $t = $this;
-        $depth = 1;
-        while ($t = $t->next()) {
-            $br = $t->getType();
-            if ($br == null) {
-                $br = $t->getValue();
-            }
-            switch ($br) {
-                case '{':
-                case T_CURLY_OPEN:
-                case T_DOLLAR_OPEN_CURLY_BRACES:
-                    ++$depth;
-                    break;
-                case '}':
-                    --$depth;
-                    break;
-            }
-            if (0 == $depth) {
-                return $t->become($becomeType);
-            }
-        }
-        return false;
     }
     
     protected function getTokens($direction, $num, $skipWhitespace) {
