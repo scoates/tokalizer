@@ -23,10 +23,11 @@ class HtmlTokenOutput extends TextTokenOutput {
         
         // title
         $ret .= 'title="Token #' . $this->Token->getSetIndex();
+        $ret .= ($this->Token->getName() ? ', ' . $this->Token->getName() : '');
         if ($this->Token instanceof HtmlOutputDecoration) {
             $ret .= ($x = $this->Token->decorate_title()) ? " $x" : '';
         }
-        $ret .= ($this->Token->getName() ? ', ' . $this->Token->getName() : '') .'" ';
+        $ret .= '" ';
         
         // name
         $ret .= 'name="' . htmlentities($anchor, ENT_QUOTES, 'UTF-8');

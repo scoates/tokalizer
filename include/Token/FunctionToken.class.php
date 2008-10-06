@@ -1,6 +1,6 @@
 <?php
 
-class FunctionToken extends Token {
+class FunctionToken extends Token implements HtmlOutputDecoration {
     
     public static function conjure() {
         throw new Exception("Don't conjure specific types of token, use Token::conjure() instead");
@@ -71,6 +71,12 @@ class FunctionToken extends Token {
             default:
                 throw new Exception('Invalid visibility');
         }
+    }
+
+    public function decorate_class() {}
+    
+    public function decorate_title() {
+        return 'function ' . $this->getNameToken()->getValue();
     }
 
 }
