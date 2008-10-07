@@ -16,7 +16,7 @@ class FunctionDefinition extends Definition {
         $this->static = $t->getStatic();
         $this->StartToken = $t->getStartToken($this->visibility, $this->static);
         $openBrace = $t->findOpenBrace();
-        $this->EndToken = $openBrace->findMatchingBrace('FunctionEndToken');
+        $this->EndToken = $openBrace->findMatchedToken('FunctionEndToken');
         $this->class = $this->determineClass();
         $this->setOutput(new TextFunctionDefinitionOutput($this));
     }

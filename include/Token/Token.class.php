@@ -10,6 +10,8 @@ require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
 require dirname(__FILE__) . '/StaticFunctionCallToken.class.php';
 require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
+require dirname(__FILE__) . '/MatchedToken.abstract.php';
+require dirname(__FILE__) . '/OpenMatchedToken.abstract.php';
 require dirname(__FILE__) . '/OpenBraceToken.class.php';
 require dirname(__FILE__) . '/../Output/AbstractTokenOutput.class.php';
 require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';

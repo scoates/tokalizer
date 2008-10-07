@@ -19,7 +19,7 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= '" ';
         
         // title
-        $ret .= 'title="Token #' . $this->Token->getSetIndex();
+        $ret .= 'title="' . get_class($this->Token) . ' #' . $this->Token->getSetIndex();
         $ret .= ($this->Token->getName() ? ', ' . $this->Token->getName() : '');
         if ($this->Token instanceof HtmlOutputDecoration) {
             $ret .= ($x = $this->Token->decorate_title()) ? " $x" : '';

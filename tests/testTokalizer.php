@@ -85,7 +85,7 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
     
     public function testTokenFindMatchingBrace() {
-        $this->assertEquals(10, $this->SetFunction[8]->findMatchingBrace()->index());
+        $this->assertEquals(10, $this->SetFunction[8]->findMatchedToken()->index());
     }
     
     public function testSetGetFunctions() {
@@ -165,12 +165,13 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertEquals('bar', $calls[5]->className());
         $this->assertNull($calls[6]->className());
     }
-
+/*
     public function testFunctionCallsComplexClassName() {
         $calls = $this->SetFuncMulti->getFunctionCalls();
         $this->assertEquals('foo', $calls[1]->className());
         $this->assertEquals('bar', $calls[4]->className());
     }
+*/
     
     public function testSetGetContext() {
         $this->assertEquals('foo (class)', $this->SetFuncMulti->getContext(3));

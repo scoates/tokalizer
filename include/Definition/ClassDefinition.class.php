@@ -9,7 +9,7 @@ class ClassDefinition extends Definition {
         $this->name = $t->getNameToken()->getValue();
         $this->StartToken = $t->getStartToken();
         $openBrace = $t->findOpenBrace();
-        $this->EndToken = $openBrace->findMatchingBrace('ClassEndToken');
+        $this->EndToken = $openBrace->findMatchedToken('ClassEndToken');
         $this->abstract = $t->getAbstract();
         $this->extends = $t->getExtends();
         $this->setOutput(new TextClassDefinitionOutput($this));
