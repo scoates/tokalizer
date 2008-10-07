@@ -13,6 +13,8 @@ require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
 require dirname(__FILE__) . '/MatchedToken.abstract.php';
 require dirname(__FILE__) . '/OpenMatchedToken.abstract.php';
 require dirname(__FILE__) . '/OpenBraceToken.class.php';
+require dirname(__FILE__) . '/OpenParenToken.class.php';
+require dirname(__FILE__) . '/OpenBracketToken.class.php';
 require dirname(__FILE__) . '/../Output/AbstractTokenOutput.class.php';
 require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';
 
@@ -106,6 +108,14 @@ class Token {
                 return new OpenBraceToken(array($this->type, $this->value), $this->Set, $this->setIndex);
                 break;
             
+            case '(':
+                return new OpenParenToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                break;
+
+            case '[':
+                return new OpenBracketToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                break;
+
         }
         
         // fall through to no mutation
