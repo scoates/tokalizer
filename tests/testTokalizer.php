@@ -31,8 +31,8 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->setFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
         $this->setFuncMulti->parse();
         
-        $this->setFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
-        $this->setFuncMulti->parse();
+        $this->setAbstractInterface = TokenSet::fromFile('testcode/abstract_interface.php');
+        //$this->setAbstractInterface->parse();
     }
     
     public function testSetReconstruct() {
