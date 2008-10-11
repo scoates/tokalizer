@@ -26,6 +26,10 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
             font-family: monospace;
             float: left;
         }
+        
+        div.tokalizer-tokens {
+            overflow: auto;
+        }
         </style>
         <script type="text/javascript">
         function highlight_tokens(toggle, tokenid) {
@@ -34,7 +38,13 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
             t.style.backgroundColor = bg;
         }
         </script>
-        <div class="tokalizer-linenumbers"><?php echo implode("<br />\n", range(1, $ts->getNumLines()));?></div>
+        <div class="tokalizer-linenumbers"><?php
+            for ($n=1; $n < $ts->getNumLines(); $n++) {
+                echo '<span id="token-line-' . $n .'">';
+                echo $n;
+                echo '</span><br />';
+            }
+        ?></div>
         <div class="tokalizer-tokens">
             <?php echo $ts->reconstruct(); ?>
         </div>
