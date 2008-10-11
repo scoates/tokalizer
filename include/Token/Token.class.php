@@ -113,15 +113,15 @@ class Token {
                 break;
             
             case '{':
-                return new OpenBraceToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                return new OpenBraceToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
                 break;
             
             case '(':
-                return new OpenParenToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                return new OpenParenToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
                 break;
 
             case '[':
-                return new OpenBracketToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                return new OpenBracketToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
                 break;
 
         }
@@ -218,7 +218,7 @@ class Token {
     public function findOpenBrace() {
         $t = $this;
         while ($t = $t->next()) {
-            if ($t->getValue() == '{') {
+            if ($t instanceof OpenBraceToken) {
                 return $t;
             }
         }
