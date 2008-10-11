@@ -1,3 +1,3 @@
 <?php
 
-class TextFunctionDefinitionOutput extends TextFunctionDefinitionOutput {}
+class HtmlFunctionDefinitionOutput extends TextFunctionDefinitionOutput {}
