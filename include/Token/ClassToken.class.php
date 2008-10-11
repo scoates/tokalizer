@@ -29,11 +29,11 @@ class ClassToken extends Token implements HtmlOutputDecoration {
         return $prev[0]->getType() == T_ABSTRACT;
     }
     
-    public function decorate_title() {
+    public function decorateTitle() {
         return 'class ' . $this->getNameToken()->getValue();
     }
 
-    public function decorate_rollover() {
+    public function decorateRollover() {
         return '';
     }
 }

@@ -32,7 +32,7 @@ abstract class MatchedToken extends Token implements HtmlOutputDecoration {
         return false;
     }
     
-    public function decorate_rollover() {
+    public function decorateRollover() {
         $ret = 'onmouseover="highlight_tokens(true, \'' . $this->getMatchedToken()->getUniqueName() . '\');" ';
         $ret .= 'onmouseout="highlight_tokens(false, \'' . $this->getMatchedToken()->getUniqueName() . '\');" ';
         return $ret;

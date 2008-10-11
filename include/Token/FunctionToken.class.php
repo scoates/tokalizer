@@ -73,11 +73,11 @@ class FunctionToken extends Token implements HtmlOutputDecoration {
         }
     }
     
-    public function decorate_title() {
+    public function decorateTitle() {
         return 'function ' . $this->getNameToken()->getValue();
     }
     
-    public function decorate_rollover() {
+    public function decorateRollover() {
         return '';
     }
 

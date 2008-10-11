@@ -1,7 +1,7 @@
 <?php
 
 abstract class OpenMatchedToken extends MatchedToken {
-    public function decorate_title() {
+    public function decorateTitle() {
         return 'closes on line: ' . $this->MatchedToken->line();
     }
     

@@ -28,7 +28,7 @@ class HtmlTokenOutput extends TextTokenOutput {
         }
         $ret .= ($this->Token->getName() ? ' ' . $this->Token->getName() : '');
         if ($this->Token instanceof HtmlOutputDecoration) {
-            $ret .= ($x = $this->Token->decorate_title()) ? " $x" : '';
+            $ret .= ($x = $this->Token->decorateTitle()) ? " $x" : '';
         }
         $ret .= '" ';
         
@@ -37,7 +37,7 @@ class HtmlTokenOutput extends TextTokenOutput {
         
         // roll over
         if ($this->Token instanceof HtmlOutputDecoration) {
-            $ret .= $this->Token->decorate_rollover();
+            $ret .= $this->Token->decorateRollover();
         }
         
         $ret .= '>';
