@@ -1,6 +1,6 @@
 <?php
 class FunctionDefinition extends Definition {
-    protected $FunctionToken;
+    protected $functionToken;
     protected $class; // ClassDefinition
     protected $visibility;
     protected $static;
@@ -10,7 +10,7 @@ class FunctionDefinition extends Definition {
     const V_PUBLIC = T_PUBLIC;
     
     public function __construct(FunctionToken $t) {
-        $this->FunctionToken = $t;
+        $this->functionToken = $t;
         $this->name = $t->getNameToken()->getValue();
         $this->visibility = $t->getVisibility();
         $this->static = $t->getStatic();
@@ -22,8 +22,8 @@ class FunctionDefinition extends Definition {
     }
     
     protected function determineClass() {
-        foreach ($this->FunctionToken->set()->getClasses() as $class) {
-            if ($class->occupiesLine($this->FunctionToken->line())) {
+        foreach ($this->functionToken->set()->getClasses() as $class) {
+            if ($class->occupiesLine($this->functionToken->line())) {
                 return $class->getName();
             }
         }
@@ -39,6 +39,6 @@ class FunctionDefinition extends Definition {
     }
     
     public function getFunctionToken() {
-        return $this->FunctionToken;
+        return $this->functionToken;
     }
 }
