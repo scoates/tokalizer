@@ -1,7 +1,7 @@
 <?php
 class FunctionDefinition extends Definition {
     protected $functionToken;
-    protected $class; // ClassDefinition
+    protected $classDefinitionToken;
     protected $visibility;
     protected $static;
 
@@ -14,7 +14,7 @@ class FunctionDefinition extends Definition {
         $this->name = $t->getNameToken()->getValue();
         $this->visibility = $t->getVisibility();
         $this->static = $t->getStatic();
-        $this->class = $this->determineClass();
+        $this->classDefinitionToken = $this->determineClass();
         $this->StartToken = $t->getStartToken($this->visibility, $this->static);
         $openBrace = $t->findOpenBrace();
         $this->EndToken = $openBrace->findMatchedToken('FunctionEndToken');
@@ -24,14 +24,18 @@ class FunctionDefinition extends Definition {
     protected function determineClass() {
         foreach ($this->functionToken->set()->getClasses() as $class) {
             if ($class->occupiesLine($this->functionToken->line())) {
-                return $class->getName();
+                return $class;
             }
         }
         return null;
     }
     
     public function getClass() {
-        return $this->class;
+        if ($this->classDefinitionToken) {
+            return $this->classDefinitionToken->getName();
+        } else {
+            return null;
+        }
     }
     
     public function getVisibility() {
