@@ -6,120 +6,122 @@ require '../include/Output/HtmlTokenOutput.class.php';
 
 class TestTokalizer extends PHPUnit_Framework_TestCase {
 
-    protected $SetFunction;
-    protected $SetClass;
-    protected $SetClassExtends;
-    protected $SetClassAbstract;
-    protected $SetFuncMulti;
+    protected $setFunction;
+    protected $setClass;
+    protected $setClassExtends;
+    protected $setClassAbstract;
+    protected $setFuncMulti;
 
     public function setUp() {
-        $this->SetFunction = new TokenSet('<?php
+        $this->setFunction = new TokenSet('<?php
             function foo() {
             }'
         );
-        $this->SetFunction->parse();
+        $this->setFunction->parse();
         
-        $this->SetClass = TokenSet::fromFile('testcode/class_simple.php');
-        $this->SetClass->parse();
+        $this->setClass = TokenSet::fromFile('testcode/class_simple.php');
+        $this->setClass->parse();
         
-        $this->SetClassExtends = TokenSet::fromFile('testcode/class_extends.php');
-        $this->SetClassExtends->parse();
+        $this->setClassExtends = TokenSet::fromFile('testcode/class_extends.php');
+        $this->setClassExtends->parse();
         
-        $this->SetClassAbstract = TokenSet::fromFile('testcode/class_abstract.php');
-        $this->SetClassAbstract->parse();
+        $this->setClassAbstract = TokenSet::fromFile('testcode/class_abstract.php');
+        $this->setClassAbstract->parse();
         
-        $this->SetFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
-        $this->SetFuncMulti->parse();
+        $this->setFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
+        $this->setFuncMulti->parse();
         
+        $this->setFuncMulti = TokenSet::fromFile('testcode/func_multi.php');
+        $this->setFuncMulti->parse();
     }
     
     public function testSetReconstruct() {
-        $this->assertEquals(file_get_contents('testcode/class_simple.php'), $this->SetClass->reconstruct());
+        $this->assertEquals(file_get_contents('testcode/class_simple.php'), $this->setClass->reconstruct());
     }
 
 //    public function testSetString() {
-//        $this->assertEquals("T_OPEN_TAG   <?php\n\nT_WHITESPACE             \nT_FUNCTION   function\nT_WHITESPACE  \nT_STRING     foo\n             (\n             )\nT_WHITESPACE  \n             {\nT_WHITESPACE \n            \n             }\n", (string)$this->SetFunction, 'toString failing');
+//        $this->assertEquals("T_OPEN_TAG   <?php\n\nT_WHITESPACE             \nT_FUNCTION   function\nT_WHITESPACE  \nT_STRING     foo\n             (\n             )\nT_WHITESPACE  \n             {\nT_WHITESPACE \n            \n             }\n", (string)$this->setFunction, 'toString failing');
 //    }
     
     public function testTokenString() {
-        $this->assertEquals('T_FUNCTION(#2) function', (string)$this->SetFunction[2]);
+        $this->assertEquals('T_FUNCTION(#2) function', (string)$this->setFunction[2]);
     }
     
     public function testTokenName() {
-        $this->assertEquals('T_FUNCTION', $this->SetFunction[2]->getName());
+        $this->assertEquals('T_FUNCTION', $this->setFunction[2]->getName());
     }
     
     public function testTokenType() {
-        $this->assertEquals(T_FUNCTION, $this->SetFunction[2]->getType());
+        $this->assertEquals(T_FUNCTION, $this->setFunction[2]->getType());
     }
     
     public function testTokenValue() {
-        $this->assertEquals('function', $this->SetFunction[2]->getValue());
+        $this->assertEquals('function', $this->setFunction[2]->getValue());
     }
     
     public function testSetCount() {
-        $this->assertEquals(count($this->SetFunction), 11);
-        $this->assertNull($this->SetFunction[count($this->SetFunction)]);
+        $this->assertEquals(count($this->setFunction), 11);
+        $this->assertNull($this->setFunction[count($this->setFunction)]);
     }
     
     public function testTokenNext() {
-        $this->assertEquals('T_FUNCTION(#2) function', (string)$this->SetFunction[1]->next());
-        $this->assertFalse($this->SetFunction[count($this->SetFunction) - 1]->next());
+        $this->assertEquals('T_FUNCTION(#2) function', (string)$this->setFunction[1]->next());
+        $this->assertFalse($this->setFunction[count($this->setFunction) - 1]->next());
     }
 
     public function testTokenPrev() {
-        $this->assertEquals('T_FUNCTION(#2) function', (string)$this->SetFunction[3]->prev());
-        $this->assertFalse($this->SetFunction[0]->prev());
+        $this->assertEquals('T_FUNCTION(#2) function', (string)$this->setFunction[3]->prev());
+        $this->assertFalse($this->setFunction[0]->prev());
     }
     
     public function testTokenLine() {
-        $this->assertEquals(2, $this->SetFunction[2]->line());
+        $this->assertEquals(2, $this->setFunction[2]->line());
     }
     
     public function testTokenIndex() {
-        $this->assertEquals(4, $this->SetFunction[4]->index());
+        $this->assertEquals(4, $this->setFunction[4]->index());
     }
     
     public function testTokenFindOpenBrace() {
-        $this->assertEquals(8, $this->SetFunction[1]->findOpenBrace()->index());
+        $this->assertEquals(8, $this->setFunction[1]->findOpenBrace()->index());
     }
     
     public function testTokenFindMatchingBrace() {
-        $this->assertEquals(10, $this->SetFunction[8]->findMatchedToken()->index());
+        $this->assertEquals(10, $this->setFunction[8]->findMatchedToken()->index());
     }
     
     public function testSetGetFunctions() {
-        $this->assertEquals(1, count($this->SetFunction->getFunctions()));
+        $this->assertEquals(1, count($this->setFunction->getFunctions()));
     }
     
     public function testSetGetClasses() {
-        $this->assertEquals(1, count($this->SetClass->getClasses()));
+        $this->assertEquals(1, count($this->setClass->getClasses()));
     }
     
     public function testTokenClassExtendsNull() {
-        $classes = $this->SetClass->getClasses();
+        $classes = $this->setClass->getClasses();
         $this->assertNull($classes[0]->getExtends());
     }
     
     public function testSetFunctionClass() {
-        $functions = $this->SetClass->getFunctions();
+        $functions = $this->setClass->getFunctions();
         $this->assertEquals('foo', $functions[0]->getClass());
     }
     
     public function testTokenClassExtends() {
-        $classes = $this->SetClassExtends->getClasses();
+        $classes = $this->setClassExtends->getClasses();
         $this->assertEquals('baz', $classes[0]->getExtends());
     }
     
     public function testTokenClassAbstract() {
-        $classes = $this->SetClass->getClasses();
+        $classes = $this->setClass->getClasses();
         $this->assertFalse($classes[0]->getAbstract());
-        $classes = $this->SetClassAbstract->getClasses();
+        $classes = $this->setClassAbstract->getClasses();
         $this->assertTrue($classes[0]->getAbstract());
     }
     
     public function testFuncMultiClass() {
-        $funcs = $this->SetFuncMulti->getFunctions();
+        $funcs = $this->setFuncMulti->getFunctions();
         $this->assertEquals('foofunc', $funcs[0]->getName());
         $this->assertEquals('foo', $funcs[0]->getClass());
         $this->assertEquals('barfunc', $funcs[1]->getName());
@@ -131,12 +133,12 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
     
     public function testFunctionCallsCount() {
-        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $calls = $this->setFuncMulti->getFunctionCalls();
         $this->assertEquals(7, count($calls));
     }
     
     public function testFunctionCallsType() {
-        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $calls = $this->setFuncMulti->getFunctionCalls();
         $this->assertTrue($calls[0] instanceof ConstructorFunctionCallToken);
         $this->assertTrue($calls[1] instanceof ObjectFunctionCallToken);
         $this->assertTrue($calls[2] instanceof ConstructorFunctionCallToken);
@@ -147,7 +149,7 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
     
     public function testFunctionCallsFunctionName() {
-        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $calls = $this->setFuncMulti->getFunctionCalls();
         $this->assertEquals('foo', $calls[0]->functionName());
         $this->assertEquals('foofunc', $calls[1]->functionName());
         $this->assertEquals('bar', $calls[2]->functionName());
@@ -158,7 +160,7 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
     
     public function testFunctionCallsSimpleClassName() {
-        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $calls = $this->setFuncMulti->getFunctionCalls();
         $this->assertEquals('foo', $calls[0]->className());
         $this->assertEquals('bar', $calls[2]->className());
         $this->assertEquals('bar', $calls[3]->className());
@@ -167,16 +169,16 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
 /*
     public function testFunctionCallsComplexClassName() {
-        $calls = $this->SetFuncMulti->getFunctionCalls();
+        $calls = $this->setFuncMulti->getFunctionCalls();
         $this->assertEquals('foo', $calls[1]->className());
         $this->assertEquals('bar', $calls[4]->className());
     }
 */
     
     public function testSetGetContext() {
-        $this->assertEquals('foo (class)', $this->SetFuncMulti->getContext(3));
-        $this->assertEquals('bar::barfunc()', $this->SetFuncMulti->getContext(10));
-        $this->assertNull($this->SetFuncMulti->getContext(17));
+        $this->assertEquals('foo (class)', $this->setFuncMulti->getContext(3));
+        $this->assertEquals('bar::barfunc()', $this->setFuncMulti->getContext(10));
+        $this->assertNull($this->setFuncMulti->getContext(17));
     }
     
 }
