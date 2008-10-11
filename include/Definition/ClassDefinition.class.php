@@ -26,4 +26,5 @@ class ClassDefinition extends Definition {
     public function getClassToken() {
         return $this->ClassToken;
     }
+    
 }

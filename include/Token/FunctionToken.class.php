@@ -13,7 +13,7 @@ class FunctionToken extends Token implements HtmlOutputDecoration {
 
     public function getVisibility() {
         // fetch the two (or fewer) previous tokens
-        $visibility = null;
+        $visibility = T_PUBLIC; // default to public
         foreach ($this->getPrevTokens(2) as $prev) {
             // check those tokens for visibility;
             switch ($prev->getType()) {
@@ -39,6 +39,19 @@ class FunctionToken extends Token implements HtmlOutputDecoration {
             }
         }
         return $static;
+    }
+    
+    public function getAbstract() {
+        // fetch the three (or fewer) previous tokens
+        foreach ($this->getPrevTokens(3) as $prev) { // abstract{0} static{1} public{2} function
+            // check those tokens for abstract
+            switch ($prev->getType()) {
+                case T_ABSTRACT:
+                    return $prev;
+                    break;
+            }
+        }
+        return null;
     }
     
     public function getStartToken($visibility, $static) {

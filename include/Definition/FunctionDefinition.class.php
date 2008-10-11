@@ -3,7 +3,8 @@ class FunctionDefinition extends Definition {
     protected $functionToken;
     protected $classDefinitionToken;
     protected $visibility;
-    protected $static;
+    protected $isStatic;
+    protected $isAbstract;
 
     const V_PROTECTED = T_PROTECTED;
     const V_PRIVATE = T_PRIVATE;
@@ -13,11 +14,20 @@ class FunctionDefinition extends Definition {
         $this->functionToken = $t;
         $this->name = $t->getNameToken()->getValue();
         $this->visibility = $t->getVisibility();
-        $this->static = $t->getStatic();
+        $this->isStatic = $t->getStatic();
+        $this->isAbstract = $t->getAbstract();
         $this->classDefinitionToken = $this->determineClass();
-        $this->StartToken = $t->getStartToken($this->visibility, $this->static);
-        $openBrace = $t->findOpenBrace();
-        $this->EndToken = $openBrace->findMatchedToken('FunctionEndToken');
+        
+        if ($this->isAbstract) {
+            // don't fetch opening brace if this is abstract
+            // TODO: fetch semicolon
+        //    $this->StartToken = $this->getAbstractToken();
+        } else {
+            $this->StartToken = $t->getStartToken($this->visibility, $this->isStatic);
+            $openBrace = $t->findOpenBrace();
+            $this->EndToken = $openBrace->findMatchedToken('FunctionEndToken');
+        }
+        
         $this->setOutput(new TextFunctionDefinitionOutput($this));
     }
     
@@ -44,5 +54,9 @@ class FunctionDefinition extends Definition {
     
     public function getFunctionToken() {
         return $this->functionToken;
+    }
+    
+    protected function determineAbstract() {
+        
     }
 }

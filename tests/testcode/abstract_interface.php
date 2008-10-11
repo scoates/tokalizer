@@ -5,6 +5,6 @@ interface foo {
 }
 
 abstract class baz {
-//    abstract public function bax();
+    abstract public function bax();
 }
 
