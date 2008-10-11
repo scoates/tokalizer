@@ -6,7 +6,7 @@ class OpenBracketToken extends OpenMatchedToken implements HtmlOutputDecoration 
         parent::__construct($token, $Set, $setIndex, $line, $uniqueName);
         $this->ownTokenValues = array('[');
         $this->matchedTokenValues = array(']');
-        $this->findMatchedToken();
+        $this->findMatchedToken('CloseBracketToken');
     }
 
 }

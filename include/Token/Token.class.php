@@ -10,6 +10,7 @@ require dirname(__FILE__) . '/OpenBracketToken.class.php';
 require dirname(__FILE__) . '/CloseMatchedToken.abstract.php';
 require dirname(__FILE__) . '/CloseBraceToken.class.php';
 require dirname(__FILE__) . '/CloseParenToken.class.php';
+require dirname(__FILE__) . '/CloseBracketToken.class.php';
 
 require dirname(__FILE__) . '/ClassToken.class.php';
 require dirname(__FILE__) . '/ClassEndToken.class.php';
@@ -247,6 +248,9 @@ class Token {
                 break;
             case 'CloseParenToken':
                 $new = new CloseParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
+                break;
+            case 'CloseBracketToken':
+                $new = new CloseBracketToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
             default:
                 return $this;
