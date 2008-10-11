@@ -12,6 +12,7 @@ require dirname(__FILE__) . '/CloseBraceToken.class.php';
 require dirname(__FILE__) . '/CloseParenToken.class.php';
 require dirname(__FILE__) . '/CloseBracketToken.class.php';
 
+require dirname(__FILE__) . '/InterfaceToken.class.php';
 require dirname(__FILE__) . '/ClassToken.class.php';
 require dirname(__FILE__) . '/ClassEndToken.class.php';
 
@@ -48,6 +49,10 @@ class Token {
     public static function conjure($token, TokenSet $tokenSet, TokenOutput $tokenOutput = null) {
         if (is_array($token)) {
             switch ($token[0]) {
+                case T_INTERFACE:
+                    $t = new InterfaceToken($token, $tokenSet);
+                    break; // semantics (-:
+                
                 case T_CLASS:
                     $t = new ClassToken($token, $tokenSet);
                     break; // semantics (-:

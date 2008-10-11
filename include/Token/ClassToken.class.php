@@ -1,19 +1,6 @@
 <?php
 
-class ClassToken extends Token implements HtmlOutputDecoration {
-    
-    public static function conjure() {
-        throw new Exception("Don't conjure specific types of token, use Token::conjure() instead");
-    }
-    
-    public function getNameToken() {
-        $nameToken = $this->getNextTokens(1);
-        return $nameToken[0];
-    }
-    
-    public function getStartToken() {
-        return $this;
-    }
+class ClassToken extends InterfaceToken {
     
     public function getExtends() {
         $next = $this->getNextTokens(3); // class foo(0) extends(1) bar(2)
@@ -33,7 +20,4 @@ class ClassToken extends Token implements HtmlOutputDecoration {
         return 'class ' . $this->getNameToken()->getValue();
     }
 
-    public function decorateRollover() {
-        return '';
-    }
 }
