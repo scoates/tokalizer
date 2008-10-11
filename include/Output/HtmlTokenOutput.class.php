@@ -13,7 +13,10 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= 'id="' . $id . '" ';
         
         // class
-        $ret .= 'class="token ' . strtolower($this->Token->getName());
+        $ret .= 'class="token ';
+        if ($n = strtolower($this->Token->getName())) {
+            $ret .= $n;
+        }
         $ret .= ($class == 'token' ? '' : " $class");
         $ret .= '" ';
         
