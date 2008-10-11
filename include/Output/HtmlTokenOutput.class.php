@@ -13,9 +13,9 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= 'id="' . $id . '" ';
         
         // class
-        $ret .= 'class="token ';
+        $ret .= 'class="token';
         if ($n = strtolower($this->Token->getName())) {
-            $ret .= $n;
+            $ret .= " $n";
         }
         $ret .= ($class == 'token' ? '' : " $class");
         $ret .= '" ';
@@ -26,7 +26,7 @@ class HtmlTokenOutput extends TextTokenOutput {
         if ($this->Token instanceof MatchedToken) {
             $ret .= " match(" . $this->Token->getMatchedToken()->getUniqueName() .") ";
         }
-        $ret .= ($this->Token->getName() ? ', ' . $this->Token->getName() : '');
+        $ret .= ($this->Token->getName() ? ' ' . $this->Token->getName() : '');
         if ($this->Token instanceof HtmlOutputDecoration) {
             $ret .= ($x = $this->Token->decorate_title()) ? " $x" : '';
         }
