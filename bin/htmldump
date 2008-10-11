@@ -34,7 +34,7 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
         <script type="text/javascript">
         function highlight_tokens(toggle, tokenid) {
             var t = document.getElementById(tokenid);
-            var bg = (toggle ? 'orange' : 'white');
+            var bg = (toggle ? 'orange' : null);
             t.style.backgroundColor = bg;
         }
         </script>

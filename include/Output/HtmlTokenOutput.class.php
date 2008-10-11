@@ -37,9 +37,8 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= 'name="' . htmlentities($anchor, ENT_QUOTES, 'UTF-8') .'" ';
         
         // roll over
-        if ($this->Token instanceof MatchedToken) {
-            $ret .= 'onmouseover="highlight_tokens(true, \'' . $this->Token->getMatchedToken()->getUniqueName() . '\');" ';
-            $ret .= 'onmouseout="highlight_tokens(false, \'' . $this->Token->getMatchedToken()->getUniqueName() . '\');" ';
+        if ($this->Token instanceof HtmlOutputDecoration) {
+            $ret .= $this->Token->decorate_rollover();
         }
         
         $ret .= '>';

@@ -33,4 +33,7 @@ class ClassToken extends Token implements HtmlOutputDecoration {
         return 'class ' . $this->getNameToken()->getValue();
     }
 
+    public function decorate_rollover() {
+        return '';
+    }
 }

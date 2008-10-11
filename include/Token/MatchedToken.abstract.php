@@ -1,6 +1,6 @@
 <?php
 
-abstract class MatchedToken extends Token {
+abstract class MatchedToken extends Token implements HtmlOutputDecoration {
     protected $MatchedToken;
     protected $matchedTokenValues = array();
     protected $ownTokenValues = array();
@@ -30,6 +30,12 @@ abstract class MatchedToken extends Token {
             }
         }
         return false;
+    }
+    
+    public function decorate_rollover() {
+        $ret = 'onmouseover="highlight_tokens(true, \'' . $this->getMatchedToken()->getUniqueName() . '\');" ';
+        $ret .= 'onmouseout="highlight_tokens(false, \'' . $this->getMatchedToken()->getUniqueName() . '\');" ';
+        return $ret;
     }
     
     abstract protected function getDirectionNextToken(Token $t);
