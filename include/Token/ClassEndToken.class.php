@@ -1,2 +1,2 @@
 <?php
-class ClassEndToken extends Token {}
+class ClassEndToken extends CloseBraceToken {}
