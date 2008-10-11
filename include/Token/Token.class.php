@@ -44,28 +44,28 @@ class Token {
         if (is_array($token)) {
             switch ($token[0]) {
                 case T_CLASS:
-                    $T = new ClassToken($token, $tokenSet);
+                    $t = new ClassToken($token, $tokenSet);
                     break; // semantics (-:
                 
                 case T_FUNCTION:
-                    $T = new FunctionToken($token, $tokenSet);
+                    $t = new FunctionToken($token, $tokenSet);
                     break; // semantics (-:
                 
                 default:
                     // fall through to regular Token
-                    $T = new Token($token, $tokenSet);
+                    $t = new Token($token, $tokenSet);
             }
         } else {
             // fall through to regular Token
-            $T = new Token($token, $tokenSet);
+            $t = new Token($token, $tokenSet);
         }
         
         if ($tokenOutput == null) {
             $tokenOutput = new TextTokenOutput;
         }
         
-        $T->setOutput($tokenOutput);
-        return $T;
+        $t->setOutput($tokenOutput);
+        return $t;
     }
     
     public function mutate() {
