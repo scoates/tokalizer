@@ -14,6 +14,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     protected $max;
     protected $tokens = array();
     protected $currentLine = 1;
+    protected $numLines;
     
     protected $definitions = array(
         'classes' => array(), // of ClassDefinitions
@@ -38,6 +39,10 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
             $this->tokens[] = $Token;
             $this->currentLine += substr_count($Token->getValue(), "\n");
         }
+        
+        // store last "currentLine" as num lines
+        $this->numLines = $this->currentLine;
+        
         // pass 2: contextual tokens
         for ($i=0; $i<count($this->tokens); $i++) {
             $this->tokens[$i] = $this->tokens[$i]->mutate();
@@ -162,6 +167,10 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
     
     public function getFunctionCalls() {
         return $this->functionCalls;
+    }
+    
+    public function getNumLines() {
+        return $this->numLines;
     }
     
     // iterator implementation

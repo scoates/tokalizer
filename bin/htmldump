@@ -18,12 +18,13 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
     </head>
     <body>
         <style type="text/css">
-        a.token {
-            font-family: monospace;
-            white-space: pre;
-        }
         a.token:hover {
             background-color: yellow;
+        }
+        div.tokalizer-linenumbers,
+        div.tokalizer-tokens {
+            font-family: monospace;
+            float: left;
         }
         </style>
         <script type="text/javascript">
@@ -33,6 +34,9 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
             t.style.backgroundColor = bg;
         }
         </script>
-        <?php echo $ts->reconstruct(); ?>
+        <div class="tokalizer-linenumbers"><?php echo implode("<br />\n", range(1, $ts->getNumLines()));?></div>
+        <div class="tokalizer-tokens">
+            <?php echo $ts->reconstruct(); ?>
+        </div>
     </body>
 </html>

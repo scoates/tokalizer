@@ -22,7 +22,8 @@ class HtmlTokenOutput extends TextTokenOutput {
         
         // title
         $ret .= 'title="' . get_class($this->Token) . ' #' . $this->Token->getSetIndex();
-        $ret .= " id(" . $this->Token->getUniqueName() .") ";
+        $ret .= " id(" . $this->Token->getUniqueName() .")";
+        $ret .= " line#" . $this->Token->line();
         if ($this->Token instanceof MatchedToken) {
             $ret .= " match(" . $this->Token->getMatchedToken()->getUniqueName() .") ";
         }
@@ -44,7 +45,11 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= '>';
         
         // body
-        $ret .= htmlentities($this->Token->getValue(), ENT_QUOTES, 'UTF-8');
+        $ret .= str_replace(
+            array("\t",' ',"\n"),
+            array('    ','&nbsp;','<br />'), // tab-width: 4
+            htmlentities($this->Token->getValue(), ENT_QUOTES, 'UTF-8')
+        );
         
         // closing tag
         $ret .= '</a>';
