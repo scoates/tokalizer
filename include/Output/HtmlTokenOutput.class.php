@@ -3,7 +3,6 @@
 class HtmlTokenOutput extends TextTokenOutput {
     public function reconstruct() {
         $id = $this->Token->getUniqueName();
-        $anchor = "#$id";
         $class = strtolower(get_class($this->Token));
         
         // a tag
@@ -34,7 +33,7 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= '" ';
         
         // name
-        $ret .= 'name="' . htmlentities($anchor, ENT_QUOTES, 'UTF-8') .'" ';
+        $ret .= 'name="' . htmlentities($id, ENT_QUOTES, 'UTF-8') .'" ';
         
         // roll over
         if ($this->Token instanceof HtmlOutputDecoration) {
