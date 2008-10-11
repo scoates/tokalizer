@@ -2,9 +2,9 @@
 class FunctionDefinition extends Definition {
     protected $functionToken;
     protected $classDefinitionToken;
-    protected $visibility;
-    protected $isStatic;
-    protected $isAbstract;
+    protected $visibilityToken;
+    protected $staticToken;
+    protected $abstractToken;
 
     const V_PROTECTED = T_PROTECTED;
     const V_PRIVATE = T_PRIVATE;
@@ -13,17 +13,17 @@ class FunctionDefinition extends Definition {
     public function __construct(FunctionToken $t) {
         $this->functionToken = $t;
         $this->name = $t->getNameToken()->getValue();
-        $this->visibility = $t->getVisibility();
-        $this->isStatic = $t->getStatic();
-        $this->isAbstract = $t->getAbstract();
+        $this->visibilityToken = $t->getVisibility();
+        $this->staticToken = $t->getStatic();
+        $this->abstractToken = $t->getAbstract();
         $this->classDefinitionToken = $this->determineClass();
         
-        if ($this->isAbstract) {
+        if ($this->abstractToken) {
             // don't fetch opening brace if this is abstract
             // TODO: fetch semicolon
         //    $this->StartToken = $this->getAbstractToken();
         } else {
-            $this->StartToken = $t->getStartToken($this->visibility, $this->isStatic);
+            $this->StartToken = $t->getStartToken($this->visibilityToken, $this->staticToken);
             $openBrace = $t->findOpenBrace();
             $this->EndToken = $openBrace->findMatchedToken('FunctionEndToken');
         }
@@ -49,14 +49,10 @@ class FunctionDefinition extends Definition {
     }
     
     public function getVisibility() {
-        return $this->visibility;
+        return $this->visibilityToken->getType();
     }
     
     public function getFunctionToken() {
         return $this->functionToken;
-    }
-    
-    protected function determineAbstract() {
-        
     }
 }

@@ -13,32 +13,30 @@ class FunctionToken extends Token implements HtmlOutputDecoration {
 
     public function getVisibility() {
         // fetch the two (or fewer) previous tokens
-        $visibility = T_PUBLIC; // default to public
-        foreach ($this->getPrevTokens(2) as $prev) {
+        foreach ($this->getPrevTokens(2) as $prev) { // public{0} static{1} function
             // check those tokens for visibility;
             switch ($prev->getType()) {
                 case T_PUBLIC:
                 case T_PROTECTED:
                 case T_PRIVATE:
-                    $visibility = $prev->getType();
+                    return $prev;
                     break;
             }
         }
-        return $visibility;
+        return T_PUBLIC; // default to public
     }
 
     public function getStatic() {
         // fetch the two (or fewer) previous tokens
-        $static = null;
-        foreach ($this->getPrevTokens(2) as $prev) {
+        foreach ($this->getPrevTokens(2) as $prev) { // public{0} static{1} function
             // check those tokens for static
             switch ($prev->getType()) {
                 case T_STATIC:
-                    $static = true;
+                    return $prev;
                     break;
             }
         }
-        return $static;
+        return null;
     }
     
     public function getAbstract() {
