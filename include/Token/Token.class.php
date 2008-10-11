@@ -28,6 +28,8 @@ require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';
 
 class Token {
     
+    protected static $UNIQUE_COUNTER = 0;
+    
     const DIR_PREV = 1;
     const DIR_NEXT = 2;
     
@@ -39,6 +41,8 @@ class Token {
     protected $tokenOutput = null;
     
     protected $line;
+    
+    protected $uniqueName;
     
     public static function conjure($token, TokenSet $tokenSet, TokenOutput $tokenOutput = null) {
         if (is_array($token)) {
@@ -84,7 +88,7 @@ class Token {
                 // but constructor doesn't require parens
                 if ($prev[0]->type == T_NEW) {
                     // this could be a lot cleaner with LSB
-                    return new ConstructorFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex);
+                    return new ConstructorFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 }
                 
                 // check for other types
@@ -92,10 +96,10 @@ class Token {
                     // if the next token is an open paren, then we have a function call:
                     switch ($prev[0]->type) {
                         case T_PAAMAYIM_NEKUDOTAYIM: // "::" (-;
-                            return new StaticFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $prev[1]);
+                            return new StaticFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName, $prev[1]);
                             break;
                         case T_OBJECT_OPERATOR:
-                            return new ObjectFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $prev[1]);
+                            return new ObjectFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName, $prev[1]);
                             break;
                         
                         case T_FUNCTION:
@@ -104,7 +108,7 @@ class Token {
                         
                         default:
                             // quacks like a function call...
-                            return new ProceduralFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex);
+                            return new ProceduralFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                     }
                 }
                 
@@ -113,15 +117,17 @@ class Token {
                 break;
             
             case '{':
-                return new OpenBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+            case T_CURLY_OPEN:
+            case T_DOLLAR_OPEN_CURLY_BRACES:
+                return new OpenBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
             
             case '(':
-                return new OpenParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+                return new OpenParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
 
             case '[':
-                return new OpenBracketToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+                return new OpenBracketToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
 
         }
@@ -135,7 +141,12 @@ class Token {
         $this->tokenOutput->setToken($this);
     }
     
-    protected function __construct($token, TokenSet $tokenSet, $setIndex = null, $line = null) {
+    protected function __construct($token, TokenSet $tokenSet, $setIndex = null, $line = null, $uniqueName = null) {
+        if ($uniqueName) {
+            $this->uniqueName = $uniqueName;
+        } else {
+            $this->uniqueName = self::uniqueName();
+        }
         $this->tokenSet = $tokenSet;
         if ($setIndex == null) {
             $setIndex = count($this->tokenSet) - 1;
@@ -223,29 +234,19 @@ class Token {
         return false;
     }
     
-    protected function debugContext() {
-        foreach (array_reverse($this->getPrevTokens(10)) as $tok) {
-            echo "PREV: $tok\n";
-        }
-        echo "THIS: $this\n";
-        foreach ($this->getNextTokens(10) as $tok) {
-            echo "NEXT: $tok\n";
-        }
-    }
-    
     public function become($type) {
         switch ($type) {
             case 'FunctionEndToken':
-                $new = new FunctionEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+                $new = new FunctionEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
             case 'ClassEndToken':
-                $new = new ClassEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+                $new = new ClassEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
             case 'CloseBraceToken':
-                $new = new CloseBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+                $new = new CloseBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
             case 'CloseParenToken':
-                $new = new CloseParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
+                $new = new CloseParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
                 break;
             default:
                 return $this;
@@ -315,5 +316,13 @@ class Token {
                 throw new Exception('Invalid output style');
         }
         $this->tokenOutput->setToken($this);
+    }
+    
+    public function getUniqueName() {
+        return $this->uniqueName;
+    }
+    
+    protected static function uniqueName() {
+        return 'token' . ++self::$UNIQUE_COUNTER;
     }
 }

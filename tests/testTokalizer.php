@@ -179,11 +179,4 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
         $this->assertNull($this->SetFuncMulti->getContext(17));
     }
     
-    public function testHtmlTokenOutputSlug() {
-        $this->assertEquals('foo-bar', HtmlTokenOutput::makeSlug('foo bar'));
-        $this->assertEquals('foo', HtmlTokenOutput::makeSlug('foo'));
-        $this->assertEquals('foo1', HtmlTokenOutput::makeSlug('foo'));
-        $this->assertEquals('foo2', HtmlTokenOutput::makeSlug('foo'));
-    }
-
 }

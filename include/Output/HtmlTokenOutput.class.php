@@ -1,17 +1,16 @@
 <?php
 
 class HtmlTokenOutput extends TextTokenOutput {
-    static $SLUGS = array();
-    
     public function reconstruct() {
-        $anchor = '#t' . $this->Token->getSetIndex();
-        if ($file = $this->Token->set()->getFile()) {
-            $anchor .= self::makeSlug($file . '-' . $this->Token->getSetIndex());
-        }
+        $id = $this->Token->getUniqueName();
+        $anchor = "#$id";
         $class = strtolower(get_class($this->Token));
         
         // a tag
         $ret = '<a ';
+        
+        // id
+        $ret .= 'id="' . $id . '" ';
         
         // class
         $ret .= 'class="token ' . strtolower($this->Token->getName());
@@ -20,6 +19,10 @@ class HtmlTokenOutput extends TextTokenOutput {
         
         // title
         $ret .= 'title="' . get_class($this->Token) . ' #' . $this->Token->getSetIndex();
+        $ret .= " id(" . $this->Token->getUniqueName() .") ";
+        if ($this->Token instanceof MatchedToken) {
+            $ret .= " match(" . $this->Token->getMatchedToken()->getUniqueName() .") ";
+        }
         $ret .= ($this->Token->getName() ? ', ' . $this->Token->getName() : '');
         if ($this->Token instanceof HtmlOutputDecoration) {
             $ret .= ($x = $this->Token->decorate_title()) ? " $x" : '';
@@ -27,8 +30,15 @@ class HtmlTokenOutput extends TextTokenOutput {
         $ret .= '" ';
         
         // name
-        $ret .= 'name="' . htmlentities($anchor, ENT_QUOTES, 'UTF-8');
-        $ret .= '">';
+        $ret .= 'name="' . htmlentities($anchor, ENT_QUOTES, 'UTF-8') .'" ';
+        
+        // roll over
+        if ($this->Token instanceof MatchedToken) {
+            $ret .= 'onmouseover="highlight_tokens(true, \'' . $this->Token->getMatchedToken()->getUniqueName() . '\');" ';
+            $ret .= 'onmouseout="highlight_tokens(false, \'' . $this->Token->getMatchedToken()->getUniqueName() . '\');" ';
+        }
+        
+        $ret .= '>';
         
         // body
         $ret .= htmlentities($this->Token->getValue(), ENT_QUOTES, 'UTF-8');
@@ -39,14 +49,4 @@ class HtmlTokenOutput extends TextTokenOutput {
         return $ret;
     }
     
-    public static function makeSlug($file, $suffix=0) {
-        $newFile = ($suffix) ? ($file . $suffix) : $file;
-        $newSlug = preg_replace('/[^a-z0-9-]/i', '-', $newFile);
-        if (isset(self::$SLUGS[$newSlug])) {
-            return self::makeSlug($file, $suffix+1);
-        } else {
-            self::$SLUGS[$newSlug] = 1;
-            return $newSlug;
-        }
-    }
 }

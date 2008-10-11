@@ -2,9 +2,9 @@
 class StaticFunctionCallToken extends FunctionCallToken {
     protected $classToken;
     
-    public function __construct($token, TokenSet $Set, $setIndex = null, Token $classToken) {
+    public function __construct($token, TokenSet $Set, $setIndex, $line, $uniqueName, Token $classToken) {
         $this->classToken = $classToken;
-        parent::__construct($token, $Set, $setIndex);
+        parent::__construct($token, $Set, $setIndex, $line, $uniqueName);
     }
     
     protected function determineClassName() {

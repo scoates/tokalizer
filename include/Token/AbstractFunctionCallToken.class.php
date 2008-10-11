@@ -5,8 +5,8 @@ abstract class FunctionCallToken extends Token {
     
     abstract protected function determineClassName();
     
-    public function __construct($token, TokenSet $Set, $setIndex) {
-        parent::__construct($token, $Set, $setIndex);
+    public function __construct($token, TokenSet $Set, $setIndex, $line=null, $uniqueName=null) {
+        parent::__construct($token, $Set, $setIndex, $line, $uniqueName);
         $this->functionName = $this->value;
         $this->className = $this->determineClassName();
     }
