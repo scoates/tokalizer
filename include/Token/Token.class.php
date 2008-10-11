@@ -31,40 +31,40 @@ class Token {
     const DIR_PREV = 1;
     const DIR_NEXT = 2;
     
-    protected $Set;
+    protected $tokenSet;
     protected $setIndex;
     
     protected $type;
     protected $value;
-    protected $Output = null;
+    protected $tokenOutput = null;
     
     protected $line;
     
-    public static function conjure($token, TokenSet $Set, TokenOutput $Output = null) {
+    public static function conjure($token, TokenSet $tokenSet, TokenOutput $tokenOutput = null) {
         if (is_array($token)) {
             switch ($token[0]) {
                 case T_CLASS:
-                    $T = new ClassToken($token, $Set);
+                    $T = new ClassToken($token, $tokenSet);
                     break; // semantics (-:
                 
                 case T_FUNCTION:
-                    $T = new FunctionToken($token, $Set);
+                    $T = new FunctionToken($token, $tokenSet);
                     break; // semantics (-:
                 
                 default:
                     // fall through to regular Token
-                    $T = new Token($token, $Set);
+                    $T = new Token($token, $tokenSet);
             }
         } else {
             // fall through to regular Token
-            $T = new Token($token, $Set);
+            $T = new Token($token, $tokenSet);
         }
         
-        if ($Output == null) {
-            $Output = new TextTokenOutput;
+        if ($tokenOutput == null) {
+            $tokenOutput = new TextTokenOutput;
         }
         
-        $T->setOutput($Output);
+        $T->setOutput($tokenOutput);
         return $T;
     }
     
@@ -84,7 +84,7 @@ class Token {
                 // but constructor doesn't require parens
                 if ($prev[0]->type == T_NEW) {
                     // this could be a lot cleaner with LSB
-                    return new ConstructorFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                    return new ConstructorFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex);
                 }
                 
                 // check for other types
@@ -92,10 +92,10 @@ class Token {
                     // if the next token is an open paren, then we have a function call:
                     switch ($prev[0]->type) {
                         case T_PAAMAYIM_NEKUDOTAYIM: // "::" (-;
-                            return new StaticFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex, $prev[1]);
+                            return new StaticFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $prev[1]);
                             break;
                         case T_OBJECT_OPERATOR:
-                            return new ObjectFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex, $prev[1]);
+                            return new ObjectFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $prev[1]);
                             break;
                         
                         case T_FUNCTION:
@@ -104,7 +104,7 @@ class Token {
                         
                         default:
                             // quacks like a function call...
-                            return new ProceduralFunctionCallToken(array($this->type, $this->value), $this->Set, $this->setIndex);
+                            return new ProceduralFunctionCallToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex);
                     }
                 }
                 
@@ -113,15 +113,15 @@ class Token {
                 break;
             
             case '{':
-                return new OpenBraceToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                return new OpenBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
             
             case '(':
-                return new OpenParenToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                return new OpenParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
 
             case '[':
-                return new OpenBracketToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                return new OpenBracketToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
 
         }
@@ -130,15 +130,15 @@ class Token {
         return $this;
     }
     
-    public function setOutput(TokenOutput $Output) {
-        $this->Output = $Output;
-        $this->Output->setToken($this);
+    public function setOutput(TokenOutput $tokenOutput) {
+        $this->tokenOutput = $tokenOutput;
+        $this->tokenOutput->setToken($this);
     }
     
-    protected function __construct($token, TokenSet $Set, $setIndex = null, $line = null) {
-        $this->Set = $Set;
+    protected function __construct($token, TokenSet $tokenSet, $setIndex = null, $line = null) {
+        $this->tokenSet = $tokenSet;
         if ($setIndex == null) {
-            $setIndex = count($Set) - 1;
+            $setIndex = count($this->tokenSet) - 1;
         }
         $this->setIndex = $setIndex;
         if (is_array($token)) {
@@ -148,26 +148,26 @@ class Token {
             $this->type = null;
             $this->value = $token;
         }
-        $this->line = is_null($line) ? $Set->currentLine() : $line;
+        $this->line = is_null($line) ? $this->tokenSet->currentLine() : $line;
     }
     
     protected function ensureOutput() {
-        if ($this->Output === null) {
+        if ($this->tokenOutput === null) {
             // Token has no output object
             // can't throw an exception from __toString, so: default
-            $this->Output = new TextTokenOutput;
-            $this->Output->setToken($this);
+            $this->tokenOutput = new TextTokenOutput;
+            $this->tokenOutput->setToken($this);
         }
     }
     
     public function __toString() {
         $this->ensureOutput();
-        return $this->Output->render();
+        return $this->tokenOutput->render();
     }
     
     public function reconstruct() {
         $this->ensureOutput();
-        return $this->Output->reconstruct();
+        return $this->tokenOutput->reconstruct();
     }
     
     public function getName() {
@@ -182,22 +182,20 @@ class Token {
         return $this->type;
     }
     
-    public function next($debug=false) {
+    public function next() {
         if ($debug) {
-            echo "SI: " . $this->setIndex . "; max: " . (count($this->Set) - 1) . "\n";
+            echo "SI: " . $this->setIndex . "; max: " . (count($this->tokenSet) - 1) . "\n";
         }
-        if ($this->setIndex < (count($this->Set) - 1)) {
-            if ($debug) echo "HERE: ". $this->Set[$this->setIndex + 1];
-            return $this->Set[$this->setIndex + 1];
+        if ($this->setIndex < (count($this->tokenSet) - 1)) {
+            return $this->tokenSet[$this->setIndex + 1];
         } else {
-            if ($debug) echo "NOT HERE";
             return false;
         }
     }
     
     public function prev() {
         if ($this->setIndex > 0) {
-            return $this->Set[$this->setIndex - 1];
+            return $this->tokenSet[$this->setIndex - 1];
         } else {
             return false;
         }
@@ -212,7 +210,7 @@ class Token {
     }
     
     public function set() {
-        return $this->Set;
+        return $this->tokenSet;
     }
     
     public function findOpenBrace() {
@@ -238,21 +236,21 @@ class Token {
     public function become($type) {
         switch ($type) {
             case 'FunctionEndToken':
-                $new = new FunctionEndToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                $new = new FunctionEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
             case 'ClassEndToken':
-                $new = new ClassEndToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                $new = new ClassEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
             case 'CloseBraceToken':
-                $new = new CloseBraceToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                $new = new CloseBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
             case 'CloseParenToken':
-                $new = new CloseParenToken(array($this->type, $this->value), $this->Set, $this->setIndex, $this->line);
+                $new = new CloseParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line);
                 break;
             default:
                 return $this;
         }
-        $this->Set->replace($this->setIndex, $new);
+        $this->tokenSet->replace($this->setIndex, $new);
         return $new;
     }
     
@@ -298,24 +296,24 @@ class Token {
     public function setOutputStyle($style) {
         switch ($style) {
             case TokenOutput::STYLE_TEXT:
-                if ($this->Output instanceof TextTokenOutput) {
+                if ($this->tokenOutput instanceof TextTokenOutput) {
                     // no need to change, so short circuit
                     return;
                 }
-                $this->Output = new TextTokenOutput;
+                $this->tokenOutput = new TextTokenOutput;
                 break;
             
             case TokenOutput::STYLE_HTML:
-                if ($this->Output instanceof HtmlTokenOutput) {
+                if ($this->tokenOutput instanceof HtmlTokenOutput) {
                     // no need to change, so short circuit
                     return;
                 }
-                $this->Output = new HtmlTokenOutput;
+                $this->tokenOutput = new HtmlTokenOutput;
                 break;
             
             default:
                 throw new Exception('Invalid output style');
         }
-        $this->Output->setToken($this);
+        $this->tokenOutput->setToken($this);
     }
 }
