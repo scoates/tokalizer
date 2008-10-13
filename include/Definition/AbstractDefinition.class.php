@@ -1,7 +1,7 @@
 <?php
 abstract class Definition {
     protected $name;
-    protected $StartToken;
+    protected $startToken;
     protected $EndToken;
     protected $Output = null;
 
@@ -10,7 +10,7 @@ abstract class Definition {
     }
     
     public function startToken() {
-        return $this->StartToken;
+        return $this->startToken;
     }
     
     public function endToken() {
@@ -18,7 +18,7 @@ abstract class Definition {
     }
     
     public function occupiesLine($line) {
-        return $this->StartToken->line() <= $line && $this->EndToken->line() >= $line;
+        return $this->startToken->line() <= $line && $this->EndToken->line() >= $line;
     }
     
     public function setOutput(DefinitionOutput $Output) {
