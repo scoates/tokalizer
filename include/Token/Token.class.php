@@ -200,9 +200,6 @@ class Token {
     }
     
     public function next() {
-        if ($debug) {
-            echo "SI: " . $this->setIndex . "; max: " . (count($this->tokenSet) - 1) . "\n";
-        }
         if ($this->setIndex < (count($this->tokenSet) - 1)) {
             return $this->tokenSet[$this->setIndex + 1];
         } else {

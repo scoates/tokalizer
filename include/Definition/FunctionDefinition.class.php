@@ -21,7 +21,14 @@ class FunctionDefinition extends Definition {
         if ($this->abstractToken) {
             // don't fetch opening brace if this is abstract
             // TODO: fetch semicolon
-        //    $this->startToken = $this->getAbstractToken();
+            $t = $this->functionToken;
+            while ($t = $t->next()) {
+                if ($t->getValue() == ';') {
+                    $this->startToken = $this->abstractToken;
+                    $this->EndToken = $t;
+                    break;
+                }
+            }
         } else {
             $this->startToken = $t->getStartToken($this->visibilityToken, $this->staticToken);
             $openBrace = $t->findOpenBrace();
