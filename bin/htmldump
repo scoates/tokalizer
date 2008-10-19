@@ -21,6 +21,8 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
         div.tokalizer-linenumbers,
         div.tokalizer-tokens {
             font-family: monospace;
+        }
+        div.tokalizer-linenumbers {
             float: left;
         }
         
@@ -41,7 +43,7 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
             for ($n=1; $n < $ts->getNumLines(); $n++) {
                 echo '<span id="token-line-' . $n .'">';
                 echo $n;
-                echo '</span><br />';
+                echo "</span><br />\n";
             }
         ?></div>
         <div class="tokalizer-tokens">

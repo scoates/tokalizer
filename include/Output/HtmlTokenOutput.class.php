@@ -45,7 +45,7 @@ class HtmlTokenOutput extends TextTokenOutput {
         // body
         $ret .= str_replace(
             array("\t",' ',"\n"),
-            array('    ','&nbsp;','<br />'), // tab-width: 4
+            array('    ','&nbsp;',"<br />\n"), // tab-width: 4
             htmlentities($this->Token->getValue(), ENT_QUOTES, 'UTF-8')
         );
         
