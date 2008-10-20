@@ -1,6 +1,6 @@
 <?php
 
-class InterfaceToken extends Token implements HtmlOutputDecoration {
+class InterfaceToken extends Token {
     
     public static function conjure() {
         throw new Exception("Don't conjure specific types of token, use Token::conjure() instead");
@@ -16,10 +16,7 @@ class InterfaceToken extends Token implements HtmlOutputDecoration {
     }
     
     public function decorateTitle() {
-        return 'interface ' . $this->getNameToken()->getValue();
+        return parent::decorateTitle() . ' interface ' . $this->getNameToken()->getValue();
     }
 
-    public function decorateRollover() {
-        return '';
-    }
 }

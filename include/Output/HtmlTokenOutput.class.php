@@ -37,7 +37,8 @@ class HtmlTokenOutput extends TextTokenOutput {
         
         // roll over
         if ($this->Token instanceof HtmlOutputDecoration) {
-            $ret .= $this->Token->decorateRollover();
+            $ret .= ' onmouseover="' . $this->Token->decorateRollOver() .'"';
+            $ret .= ' onmouseout="' . $this->Token->decorateRollOut() .'"';
         }
         
         $ret .= '>';
@@ -45,7 +46,12 @@ class HtmlTokenOutput extends TextTokenOutput {
         // body
         $ret .= str_replace(
             array("\t",' ',"\n"),
-            array('    ','&nbsp;',"<br />\n"), // tab-width: 4
+            array(
+                '    ',   // tab-width: 4
+                '&nbsp;',
+                (($this->Token->getType() == T_WHITESPACE) ? '&nbsp;' : '') . "<br />\n"
+                // inject space before line break (in whitespace) for visibility
+            ),
             htmlentities($this->Token->getValue(), ENT_QUOTES, 'UTF-8')
         );
         

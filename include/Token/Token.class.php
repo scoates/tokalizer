@@ -2,33 +2,7 @@
 
 require dirname(__FILE__) . '/../Output/HtmlOutputDecoration.interface.php';
 
-require dirname(__FILE__) . '/MatchedToken.abstract.php';
-require dirname(__FILE__) . '/OpenMatchedToken.abstract.php';
-require dirname(__FILE__) . '/OpenBraceToken.class.php';
-require dirname(__FILE__) . '/OpenParenToken.class.php';
-require dirname(__FILE__) . '/OpenBracketToken.class.php';
-require dirname(__FILE__) . '/CloseMatchedToken.abstract.php';
-require dirname(__FILE__) . '/CloseBraceToken.class.php';
-require dirname(__FILE__) . '/CloseParenToken.class.php';
-require dirname(__FILE__) . '/CloseBracketToken.class.php';
-
-require dirname(__FILE__) . '/InterfaceToken.class.php';
-require dirname(__FILE__) . '/ClassToken.class.php';
-require dirname(__FILE__) . '/ClassEndToken.class.php';
-
-require dirname(__FILE__) . '/FunctionToken.class.php';
-require dirname(__FILE__) . '/FunctionEndToken.class.php';
-
-require dirname(__FILE__) . '/AbstractFunctionCallToken.class.php';
-require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
-require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
-require dirname(__FILE__) . '/StaticFunctionCallToken.class.php';
-require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
-
-require dirname(__FILE__) . '/../Output/AbstractTokenOutput.class.php';
-require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';
-
-class Token {
+class Token implements HtmlOutputDecoration {
     
     protected static $UNIQUE_COUNTER = 0;
     
@@ -51,15 +25,15 @@ class Token {
             switch ($token[0]) {
                 case T_INTERFACE:
                     $t = new InterfaceToken($token, $tokenSet);
-                    break; // semantics (-:
+                    break;
                 
                 case T_CLASS:
                     $t = new ClassToken($token, $tokenSet);
-                    break; // semantics (-:
+                    break;
                 
                 case T_FUNCTION:
                     $t = new FunctionToken($token, $tokenSet);
-                    break; // semantics (-:
+                    break;
                 
                 default:
                     // fall through to regular Token
@@ -331,4 +305,43 @@ class Token {
     protected static function uniqueName() {
         return 'token' . ++self::$UNIQUE_COUNTER;
     }
+    
+    public function decorateRollOver() {
+        return 'highlight_line(true, ' . $this->line() . ');';
+    }
+    public function decorateRollOut() {
+        return 'highlight_line(false, ' . $this->line() . ');';
+    }
+    
+    public function decorateTitle() {
+        return '';
+    }
+    
 }
+
+require dirname(__FILE__) . '/MatchedToken.abstract.php';
+require dirname(__FILE__) . '/OpenMatchedToken.abstract.php';
+require dirname(__FILE__) . '/OpenBraceToken.class.php';
+require dirname(__FILE__) . '/OpenParenToken.class.php';
+require dirname(__FILE__) . '/OpenBracketToken.class.php';
+require dirname(__FILE__) . '/CloseMatchedToken.abstract.php';
+require dirname(__FILE__) . '/CloseBraceToken.class.php';
+require dirname(__FILE__) . '/CloseParenToken.class.php';
+require dirname(__FILE__) . '/CloseBracketToken.class.php';
+
+require dirname(__FILE__) . '/InterfaceToken.class.php';
+require dirname(__FILE__) . '/ClassToken.class.php';
+require dirname(__FILE__) . '/ClassEndToken.class.php';
+
+require dirname(__FILE__) . '/FunctionToken.class.php';
+require dirname(__FILE__) . '/FunctionEndToken.class.php';
+
+require dirname(__FILE__) . '/AbstractFunctionCallToken.class.php';
+require dirname(__FILE__) . '/ProceduralFunctionCallToken.class.php';
+require dirname(__FILE__) . '/ConstructorFunctionCallToken.class.php';
+require dirname(__FILE__) . '/StaticFunctionCallToken.class.php';
+require dirname(__FILE__) . '/ObjectFunctionCallToken.class.php';
+
+require dirname(__FILE__) . '/../Output/AbstractTokenOutput.class.php';
+require dirname(__FILE__) . '/../Output/TextTokenOutput.class.php';
+

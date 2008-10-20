@@ -27,6 +27,7 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
         }
         
         div.tokalizer-tokens {
+            width: 100%;
             overflow: auto;
         }
         </style>
@@ -36,18 +37,25 @@ $ts->setOutputStyle(TokenOutput::STYLE_HTML);
             var bg = (toggle ? 'orange' : null);
             t.style.backgroundColor = bg;
         }
+        function highlight_line(toggle, linenum) {
+            var l = document.getElementById('token-line-' + linenum);
+            var bg = (toggle ? 'yellow' : null);
+            l.style.backgroundColor = bg;
+        }
         </script>
     </head>
     <body>
-        <div class="tokalizer-linenumbers"><?php
-            for ($n=1; $n < $ts->getNumLines(); $n++) {
-                echo '<span id="token-line-' . $n .'">';
-                echo $n;
-                echo "</span><br />\n";
-            }
-        ?></div>
-        <div class="tokalizer-tokens">
-            <?php echo $ts->reconstruct(); ?>
+        <div style="width: 100%">
+            <div class="tokalizer-linenumbers"><?php
+                for ($n=1; $n < $ts->getNumLines(); $n++) {
+                    echo '<span id="token-line-' . $n .'">';
+                    echo $n;
+                    echo "</span><br />\n";
+                }
+            ?></div>
+            <div class="tokalizer-tokens">
+                <?php echo $ts->reconstruct(); ?>
+            </div>
         </div>
     </body>
 </html>
