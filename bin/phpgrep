@@ -1,0 +1,32 @@
+#!/Users/sean/bin/php
+<?php
+require dirname(__FILE__) . '/../include/TokenSet.class.php';
+
+define('GREP', '/usr/bin/grep -Hn');
+
+$grepCmd = $_SERVER['argv'];
+$grepCmd[0] = GREP; // change /path/to/phpgrep to /path/to/grep;
+$grepCmd = implode(' ', $grepCmd);
+
+$grepOut = explode("\n", `$grepCmd`);
+
+$matches = array();
+foreach ($grepOut as $grepLine) {
+    if (!$grepLine) {
+        continue;
+    }
+    list($file,$line,$content) = explode(':', $grepLine, 3);
+    $matches[$file][$line] = $content;
+}
+unset($grepOut);
+
+foreach (array_keys($matches) as $file) {
+    $ts = TokenSet::fromFile($file);
+    $ts->parse();
+    foreach ($matches[$file] as $line => $content) {
+        echo $file .':';
+        echo $line;
+        echo '(' . $ts->getContext($line) .'):';
+        echo $content ."\n";
+    }
+}
