@@ -2,12 +2,13 @@
 <?php
 require dirname(__FILE__) . '/../include/TokenSet.class.php';
 
-define('GREP', '/usr/bin/grep -Hn');
+define('GREP', '/usr/bin/grep');
 
 $grepCmd = $_SERVER['argv'];
-$grepCmd[0] = GREP; // change /path/to/phpgrep to /path/to/grep;
+array_shift($grepCmd); // change /path/to/phpgrep to /path/to/grep;
+array_unshift($grepCmd, GREP, '-Hn');
+$grepCmd = array_map('escapeshellarg', $grepCmd); // unescape shell args
 $grepCmd = implode(' ', $grepCmd);
-
 $grepOut = explode("\n", `$grepCmd`);
 
 $matches = array();
