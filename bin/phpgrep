@@ -15,8 +15,13 @@ foreach ($grepOut as $grepLine) {
     if (!$grepLine) {
         continue;
     }
-    list($file,$line,$content) = explode(':', $grepLine, 3);
-    $matches[$file][$line] = $content;
+    if (substr_count($grepLine, ':') > 1) {
+        list($file,$line,$content) = explode(':', $grepLine, 3);
+        $matches[$file][$line] = $content;
+    } else {
+        // something like 'Binary file matches...'
+        echo $grepLine . "\n";
+    }
 }
 unset($grepOut);
 
@@ -26,7 +31,11 @@ foreach (array_keys($matches) as $file) {
     foreach ($matches[$file] as $line => $content) {
         echo $file .':';
         echo $line;
-        echo '(' . $ts->getContext($line) .'):';
+        if ($context = $ts->getContext($line)) {
+            echo '(' . $context .'):';
+        } else {
+            echo ':';
+        }
         echo $content ."\n";
     }
 }
