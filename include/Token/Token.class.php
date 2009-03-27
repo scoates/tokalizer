@@ -175,7 +175,7 @@ class Token implements HtmlOutputDecoration {
     }
     
     public function next() {
-        if ($this->tokenSetCount === null) { // check cache
+        if (null === $this->tokenSetCount) { // check cache
             $this->tokenSetCount = ($this->tokenSet->count() - 1); // cache
         }
         
