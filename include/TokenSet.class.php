@@ -27,11 +27,12 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         if (!is_readable($file)) {
             throw new Exception("$file is not readable");
         }
-        return new self(file_get_contents($file), $file);
+        $set = new self(file_get_contents($file));
+        $set->setFile($file);
+        return $set;
     }
 
-    public function __construct($source, $file = null) {
-        $this->file = $file;
+    public function __construct($source) {
         // pass 1: non-contextual tokens
         foreach (token_get_all($source) as $t) {
             $this->max = count($this->tokens); // one less than the number of tokens
@@ -47,6 +48,10 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         for ($i=0; $i<count($this->tokens); $i++) {
             $this->tokens[$i] = $this->tokens[$i]->mutate();
         }
+    }
+    
+    protected function setFile($file) {
+        $this->file = $file;
     }
     
     public function __toString() {
