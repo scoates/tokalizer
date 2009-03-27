@@ -10,6 +10,7 @@ class Token implements HtmlOutputDecoration {
     const DIR_NEXT = 2;
     
     protected $tokenSet;
+    protected $tokenSetCount;
     protected $setIndex;
     
     protected $type;
@@ -129,7 +130,7 @@ class Token implements HtmlOutputDecoration {
         }
         $this->tokenSet = $tokenSet;
         if ($setIndex == null) {
-            $setIndex = count($this->tokenSet) - 1;
+            $setIndex = $this->tokenSet->count() - 1;
         }
         $this->setIndex = $setIndex;
         if (is_array($token)) {
@@ -174,7 +175,11 @@ class Token implements HtmlOutputDecoration {
     }
     
     public function next() {
-        if ($this->setIndex < (count($this->tokenSet) - 1)) {
+        if ($this->tokenSetCount === null) { // check cache
+            $this->tokenSetCount = ($this->tokenSet->count() - 1); // cache
+        }
+        
+        if ($this->setIndex < $this->tokenSetCount) {
             return $this->tokenSet[$this->setIndex + 1];
         } else {
             return false;
