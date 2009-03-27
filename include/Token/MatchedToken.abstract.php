@@ -12,15 +12,17 @@ abstract class MatchedToken extends Token {
     public function findMatchedToken($becomeType = 'Token') {
         $t = $this;
         $depth = 1;
+        $ownTokens = array_flip($this->ownTokenValues);
+        $matchedTokens = array_flip($this->matchedTokenValues);
         while ($t = $this->getDirectionNextToken($t)) {
             $br = $t->getType();
             if ($br == null) {
                 $br = $t->getValue();
             }
 
-            if (in_array($br, $this->ownTokenValues)) {
+            if (isset($ownTokens[$br])) {
                 ++$depth;
-            } else if (in_array($br, $this->matchedTokenValues)) {
+            } else if (isset($matchedTokens[$br])) {
                 --$depth;
             }
 
