@@ -21,6 +21,14 @@ class Token implements HtmlOutputDecoration {
     
     protected $uniqueName;
     
+    protected static $validBecomeTypes = array(
+        'FunctionEndToken' => 1,
+        'ClassEndToken' => 1,
+        'CloseBraceToken' => 1,
+        'CloseParenToken' => 1,
+        'CloseBracketToken' => 1,
+    );
+    
     public static function conjure($token, TokenSet $tokenSet, TokenOutput $tokenOutput = null) {
         if (is_array($token)) {
             switch ($token[0]) {
@@ -217,25 +225,10 @@ class Token implements HtmlOutputDecoration {
     }
     
     public function become($type) {
-        switch ($type) {
-            case 'FunctionEndToken':
-                $new = new FunctionEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
-                break;
-            case 'ClassEndToken':
-                $new = new ClassEndToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
-                break;
-            case 'CloseBraceToken':
-                $new = new CloseBraceToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
-                break;
-            case 'CloseParenToken':
-                $new = new CloseParenToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
-                break;
-            case 'CloseBracketToken':
-                $new = new CloseBracketToken(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
-                break;
-            default:
-                return $this;
+        if (!isset(self::$validBecomeTypes[$type])) {
+            return $this;
         }
+        $new = new $type(array($this->type, $this->value), $this->tokenSet, $this->setIndex, $this->line, $this->uniqueName);
         $this->tokenSet->replace($this->setIndex, $new);
         return $new;
     }
