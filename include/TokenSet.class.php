@@ -195,7 +195,7 @@ class TokenSet implements Iterator, ArrayAccess, Countable {
         return ($offset >= 0 && $offset <= $this->max);
     }
     public function offsetGet($offset) {
-        return $this->tokens[$offset];
+        return isset($this->tokens[$offset]) ? $this->tokens[$offset] : null;
     }
     public function offsetSet($offset, $value) {
         throw new Exception('TokenSet is not writable');
