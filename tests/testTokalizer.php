@@ -6,6 +6,7 @@ require '../include/Output/HtmlTokenOutput.class.php';
 
 class TestTokalizer extends PHPUnit_Framework_TestCase {
 
+    protected $setFunctionSource;
     protected $setFunction;
     protected $setClass;
     protected $setClassExtends;
@@ -13,10 +14,10 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     protected $setFuncMulti;
 
     public function setUp() {
-        $this->setFunction = new TokenSet('<?php
+        $this->setFunctionSource = '<?php
             function foo() {
-            }'
-        );
+            }';
+        $this->setFunction = new TokenSet($this->setFunctionSource);
         $this->setFunction->parse();
         
         $this->setClass = TokenSet::fromFile('testcode/class_simple.php');
@@ -60,7 +61,7 @@ class TestTokalizer extends PHPUnit_Framework_TestCase {
     }
     
     public function testSetCount() {
-        $this->assertEquals(count($this->setFunction), 11);
+        $this->assertEquals(count($this->setFunction), count(token_get_all($this->setFunctionSource)));
         $this->assertNull($this->setFunction[count($this->setFunction)]);
     }
     
