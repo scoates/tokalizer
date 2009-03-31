@@ -1,4 +1,4 @@
-#!/Users/sean/bin/php
+#!/usr/bin/env php
 <?php
 
 require dirname(__FILE__) . '/../include/TokenSet.class.php';
